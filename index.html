@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RobloxList</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    ROBLOX<span>LIST</span>
+  </div>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#games">Games</a>
+    <a href="#popular">Popular</a>
+
+    <button id="loginButton" onclick="openLogin()">
+      Owner Login
+    </button>
+
+    <button id="logoutButton" onclick="logout()" style="display:none;">
+      Logout
+    </button>
+  </nav>
+</header>
+
+
+<div id="ownerBar" class="owner-bar" style="display:none;">
+  🔐 Owner Mode
+
+  <button onclick="openAddGame()">
+    + Add Game
+  </button>
+</div>
+
+
+<section class="hero">
+
+  <h1>Discover Roblox Games</h1>
+
+  <p>
+    Find your next favorite Roblox experience.
+    Browse popular games and discover new experiences.
+  </p>
+
+  <div class="search">
+    <input
+      id="searchBox"
+      type="text"
+      placeholder="Search games..."
+      oninput="searchGames()"
+    >
+
+    <button onclick="searchGames()">
+      Search
+    </button>
+  </div>
+
+</section>
+
+
+<main id="games">
+
+  <div class="toolbar">
+
+    <h2>Roblox Games</h2>
+
+    <select id="category" onchange="filterGames()">
+      <option value="all">All Categories</option>
+      <option value="adventure">Adventure</option>
+      <option value="simulator">Simulator</option>
+      <option value="roleplay">Roleplay</option>
+      <option value="horror">Horror</option>
+      <option value="obby">Obby</option>
+      <option value="pvp">PvP</option>
+    </select>
+
+  </div>
+
+
+  <div id="gameList" class="games">
+
+    <div class="loading">
+      Loading games...
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer>
+  RobloxList
+</footer>
+
+
+<!-- LOGIN -->
+
+<div id="loginModal" class="modal">
+
+  <div class="modal-box">
+
+    <h2>Owner Login</h2>
+
+    <p>
+      Sign in to manage RobloxList.
+    </p>
+
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="Email"
+    >
+
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Password"
+    >
+
+    <div id="loginError" class="error"></div>
+
+    <button onclick="login()">
+      Sign In
+    </button>
+
+    <button class="secondary" onclick="closeLogin()">
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ADD / EDIT -->
+
+<div id="gameModal" class="modal">
+
+  <div class="modal-box">
+
+    <h2 id="modalTitle">
+      Add Game
+    </h2>
+
+    <input
+      id="gameName"
+      placeholder="Game name"
+    >
+
+    <input
+      id="gameThumbnail"
+      placeholder="Thumbnail image URL"
+    >
+
+    <textarea
+      id="gameDescription"
+      placeholder="Description"
+    ></textarea>
+
+    <input
+      id="gameLink"
+      placeholder="Roblox game URL"
+    >
+
+    <select id="gameCategory">
+
+      <option value="adventure">
+        Adventure
+      </option>
+
+      <option value="simulator">
+        Simulator
+      </option>
+
+      <option value="roleplay">
+        Roleplay
+      </option>
+
+      <option value="horror">
+        Horror
+      </option>
+
+      <option value="obby">
+        Obby
+      </option>
+
+      <option value="pvp">
+        PvP
+      </option>
+
+    </select>
+
+    <input
+      id="gamePlayers"
+      type="number"
+      placeholder="Players"
+      value="0"
+    >
+
+    <input
+      id="gameRating"
+      type="number"
+      min="0"
+      max="100"
+      placeholder="Rating"
+      value="100"
+    >
+
+    <div id="gameError" class="error"></div>
+
+    <button onclick="saveGame()">
+      Save Game
+    </button>
+
+    <button class="secondary" onclick="closeGameModal()">
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

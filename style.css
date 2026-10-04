@@ -1,0 +1,689 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: #0b0f14;
+  color: white;
+}
+
+
+/* HEADER */
+
+header {
+  background: #111820;
+  border-bottom: 1px solid #26313d;
+
+  padding: 17px 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: #00aaff;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+nav a {
+  color: #aeb8c4;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: white;
+}
+
+nav button {
+  background: #00aaff;
+  border: none;
+  color: white;
+  padding: 9px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+/* OWNER BAR */
+
+.owner-bar {
+  background: #102c3b;
+  border-bottom: 1px solid #00aaff;
+
+  padding: 10px 7%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #70d7ff;
+}
+
+.owner-bar button {
+  background: #18b86a;
+  border: none;
+  color: white;
+  padding: 9px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+/* HERO */
+
+.hero {
+  padding: 70px 7% 50px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #101923,
+      #0b0f14
+    );
+}
+
+.hero h1 {
+  font-size: 45px;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: #8995a3;
+  margin-bottom: 25px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.search {
+  display: flex;
+  max-width: 650px;
+}
+
+.search input {
+  flex: 1;
+
+  background: #151d26;
+  border: 1px solid #2b3744;
+
+  color: white;
+
+  padding: 15px;
+
+  outline: none;
+
+  border-radius: 7px 0 0 7px;
+}
+
+.search button {
+  background: #00aaff;
+  color: white;
+  border: none;
+
+  padding: 0 25px;
+
+  border-radius: 0 7px 7px 0;
+
+  cursor: pointer;
+}
+
+
+/* MAIN */
+
+main {
+  width: 86%;
+  max-width: 1300px;
+
+  margin: 35px auto;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+select {
+  background: #151d26;
+  color: white;
+
+  border: 1px solid #2b3744;
+
+  padding: 10px;
+
+  border-radius: 6px;
+}
+
+
+/* GAME GRID */
+
+.games {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(270px, 1fr)
+    );
+
+  gap: 20px;
+}
+
+
+.game {
+  background: #121921;
+
+  border: 1px solid #26313d;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  transition: .2s;
+}
+
+.game:hover {
+  transform: translateY(-5px);
+
+  border-color: #00aaff;
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,170,255,.12);
+}
+
+
+.game-thumbnail {
+  width: 100%;
+  height: 160px;
+
+  object-fit: cover;
+
+  background: #17212c;
+}
+
+
+.game-content {
+  padding: 17px;
+}
+
+.game h3 {
+  margin-bottom: 8px;
+}
+
+.description {
+  color: #8793a0;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  min-height: 40px;
+}
+
+
+.tags {
+  margin: 13px 0;
+}
+
+.tag {
+  display: inline-block;
+
+  background: #1c2834;
+
+  color: #9ca9b7;
+
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  font-size: 11px;
+}
+
+
+.stats {
+  border-top: 1px solid #26313d;
+
+  padding-top: 12px;
+
+  display: flex;
+  justify-content: space-between;
+
+  color: #8995a3;
+
+  font-size: 12px;
+}
+
+.players {
+  color: #35d07f;
+}
+
+.rating {
+  color: #ffd34e;
+}
+
+
+/* GAME BUTTON */
+
+.play-button {
+  width: 100%;
+
+  margin-top: 14px;
+
+  padding: 10px;
+
+  border: none;
+
+  background: #00aaff;
+
+  color: white;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+}
+
+
+/* OWNER CONTROLS */
+
+.owner-controls {
+  display: flex;
+
+  gap: 8px;
+
+  padding: 12px 17px;
+
+  border-top: 1px solid #26313d;
+}
+
+.owner-controls button {
+  flex: 1;
+
+  border: none;
+
+  padding: 8px;
+
+  border-radius: 6px;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-weight: bold;
+}
+
+.edit-button {
+  background: #008ed6;
+}
+
+.delete-button {
+  background: #d83b3b;
+}
+
+
+/* MODALS */
+
+.modal {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    rgba(0,0,0,.78);
+
+  z-index: 1000;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  width: 90%;
+  max-width: 450px;
+
+  background: #121921;
+
+  border: 1px solid #2b3744;
+
+  border-radius: 12px;
+
+  padding: 25px;
+}
+
+.modal-box h2 {
+  margin-bottom: 10px;
+}
+
+.modal-box p {
+  color: #8995a3;
+
+  margin-bottom: 18px;
+}
+
+.modal-box input,
+.modal-box textarea,
+.modal-box select {
+  width: 100%;
+
+  margin-bottom: 12px;
+
+  padding: 12px;
+
+  background: #0c1117;
+
+  border: 1px solid #2b3744;
+
+  color: white;
+
+  border-radius: 6px;
+
+  outline: none;
+}
+
+.modal-box textarea {
+  height: 100px;
+
+  resize: vertical;
+}
+
+.modal-box > button {
+  padding: 11px 16px;
+
+  border: none;
+
+  background: #00aaff;
+
+  color: white;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  margin-right: 5px;
+}
+
+.modal-box .secondary {
+  background: #303b46;
+}
+
+.error {
+  color: #ff5b5b;
+
+  font-size: 13px;
+
+  margin-bottom: 12px;
+}
+
+.loading {
+  color: #8995a3;
+
+  padding: 40px;
+
+  text-align: center;
+}
+
+
+/* FOOTER */
+
+footer {
+  border-top: 1px solid #202a34;
+
+  margin-top: 60px;
+
+  padding: 40px;
+
+  text-align: center;
+
+  color: #65717e;
+}
+
+
+/* MOBILE */
+
+@media(max-width:650px) {
+
+  header {
+    padding: 15px 5%;
+  }
+
+  nav a {
+    display: none;
+  }
+
+  .hero {
+    padding: 45px 5%;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  main {
+    width: 90%;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+}
+
+/* =========================================
+   OWNER DRAG-AND-DROP
+========================================= */
+
+.game {
+  position: relative;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+/* Only owner cards are draggable */
+
+.game[draggable="true"] {
+  cursor: grab;
+}
+
+
+/* Drag handle */
+
+.drag-handle {
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  z-index: 10;
+
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: rgba(20, 20, 30, 0.85);
+
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: bold;
+
+  cursor: grab;
+
+  user-select: none;
+
+  opacity: 0.75;
+
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+
+.drag-handle:hover {
+  opacity: 1;
+
+  background: rgba(0, 170, 255, 0.9);
+
+  transform: scale(1.05);
+}
+
+
+/* While grabbing */
+
+.game.dragging {
+  opacity: 0.45;
+
+  transform: scale(0.98);
+
+  cursor: grabbing;
+}
+
+
+/* Game currently being dragged over */
+
+.game.drag-over {
+  border-color: #00aaff !important;
+
+  box-shadow:
+    0 0 0 3px rgba(0, 170, 255, 0.25),
+    0 10px 30px rgba(0, 170, 255, 0.15);
+
+  transform: translateY(4px);
+}
+
+
+/* Owner controls */
+
+.owner-controls {
+  position: absolute;
+
+  right: 12px;
+  top: 12px;
+
+  z-index: 10;
+
+  display: flex;
+
+  gap: 6px;
+}
+
+
+.owner-controls button {
+  border: none;
+
+  border-radius: 7px;
+
+  padding: 7px 10px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+
+.owner-controls button:hover {
+  transform: translateY(-1px);
+
+  opacity: 0.9;
+}
+
+
+.edit-button {
+  background: #3498db;
+
+  color: white;
+}
+
+
+.delete-button {
+  background: #e74c3c;
+
+  color: white;
+}
+
+
+/* Make sure the game content doesn't
+   overlap the owner controls */
+
+.game[draggable="true"] .game-content {
+  padding-top: 48px;
+}
+
+
+/* Don't let dragging accidentally
+   select text */
+
+.game[draggable="true"] {
+  user-select: none;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+  .drag-handle {
+    width: 30px;
+    height: 30px;
+
+    font-size: 18px;
+  }
+
+  .owner-controls {
+    right: 8px;
+    top: 8px;
+  }
+
+  .owner-controls button {
+    padding: 6px 8px;
+
+    font-size: 12px;
+  }
+
+}

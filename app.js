@@ -960,10 +960,11 @@ supabaseClient.auth.onAuthStateChange(
   }
 );
 
+
 window.addEventListener("pageshow", () => {
   const searchBox = document.getElementById("searchBox");
 
-  if (searchBox && searchBox.value.includes("@")) {
+  if (searchBox) {
     searchBox.value = "";
   }
 });

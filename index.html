@@ -58,9 +58,11 @@
 <input
   id="searchBox"
   type="search"
-  name="games-search"
+  name="roblox-game-filter"
   placeholder="Search games..."
-  autocomplete="new-password"
+  autocomplete="off"
+  readonly
+  onfocus="this.removeAttribute('readonly')"
   oninput="searchGames()"
 >
 

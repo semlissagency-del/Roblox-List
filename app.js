@@ -959,3 +959,11 @@ supabaseClient.auth.onAuthStateChange(
     await loadGames();
   }
 );
+
+window.addEventListener("pageshow", () => {
+  const searchBox = document.getElementById("searchBox");
+
+  if (searchBox && searchBox.value.includes("@")) {
+    searchBox.value = "";
+  }
+});

@@ -54,12 +54,15 @@
   </p>
 
   <div class="search">
-    <input
-      id="searchBox"
-      type="text"
-      placeholder="Search games..."
-      oninput="searchGames()"
-    >
+    
+<input
+  id="searchBox"
+  type="search"
+  name="games-search"
+  placeholder="Search games..."
+  autocomplete="off"
+  oninput="searchGames()"
+>
 
     <button onclick="searchGames()">
       Search

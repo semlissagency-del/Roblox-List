@@ -19,6 +19,8 @@ let draggedGameId = null;
 ================================ */
 
 document.addEventListener("DOMContentLoaded", async () => {
+  document.getElementById("searchBox").value = "";
+
   await checkLogin();
   await loadGames();
 });

@@ -687,3 +687,136 @@ footer {
   }
 
 }
+
+/* =========================================
+   THUMBNAIL POSITIONING
+========================================= */
+
+.thumbnail-preview {
+  width: 100%;
+  height: 180px;
+
+  object-fit: cover;
+  object-position: 50% 50%;
+
+  display: block;
+
+  margin-bottom: 12px;
+
+  border-radius: 8px;
+
+  background: #17212c;
+
+  border: 1px solid #2b3744;
+}
+
+
+.thumbnail-position-controls {
+  background: #0c1117;
+
+  border: 1px solid #2b3744;
+
+  border-radius: 8px;
+
+  padding: 12px;
+
+  margin-bottom: 12px;
+}
+
+
+.thumbnail-position-controls label {
+  display: block;
+
+  color: #aeb8c4;
+
+  font-size: 13px;
+
+  margin-bottom: 12px;
+}
+
+
+.thumbnail-position-controls label:last-child {
+  margin-bottom: 0;
+}
+
+
+.thumbnail-position-controls input[type="range"] {
+  width: 100%;
+
+  margin-top: 7px;
+
+  margin-bottom: 0;
+
+  padding: 0;
+
+  accent-color: #00aaff;
+}
+
+.owner-login-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.owner-login-box {
+  position: relative;
+  width: 320px;
+  max-width: calc(100% - 30px);
+  padding: 24px;
+  background: #111820;
+  border: 1px solid #2b3744;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.owner-login-box h2 {
+  margin: 0 0 18px;
+  color: white;
+  font-size: 20px;
+}
+
+.owner-login-box input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  padding-right: 50px;
+  background: #0c1117;
+  color: white;
+  border: 1px solid #2b3744;
+  border-radius: 8px;
+  outline: none;
+}
+
+.owner-login-arrow {
+  position: absolute;
+  right: 34px;
+  top: 62px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #00aaff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.owner-login-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  color: #aeb8c4;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#ownerLoginError {
+  margin-top: 12px;
+  color: #ff6b6b;
+  font-size: 13px;
+}

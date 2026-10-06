@@ -10,8 +10,13 @@ const supabaseClient = supabase.createClient(
 );
 
 let owner = false;
+const OWNER_EMAIL = "semlissagency@gmail.com";
 let editingGameId = null;
 let draggedGameId = null;
+let thumbnailImageData = "";
+
+let thumbnailPositionX = 50;
+let thumbnailPositionY = 50;
 
 
 /* ================================
@@ -36,45 +41,22 @@ async function checkLogin() {
   } = await supabaseClient.auth.getUser();
 
   if (data && data.user) {
-    owner = true;
-    showOwnerMode();
+    owner =
+      data.user.email?.toLowerCase() === OWNER_EMAIL.toLowerCase();
+
+    if (owner) {
+      showOwnerMode();
+    } else {
+      hideOwnerMode();
+    }
+  } else {
+    owner = false;
+    hideOwnerMode();
   }
 }
 
-
 async function login() {
-  const email =
-    document.getElementById("loginEmail").value.trim();
-
-  const password =
-    document.getElementById("loginPassword").value;
-
-  const errorBox =
-    document.getElementById("loginError");
-
-  errorBox.textContent = "";
-
-  const {
-    data,
-    error
-  } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    errorBox.textContent =
-      "Login failed: " + error.message;
-    return;
-  }
-
-  if (data.user) {
-    owner = true;
-
-    closeLogin();
-    showOwnerMode();
-    await loadGames();
-  }
+  openOwnerLogin();
 }
 
 
@@ -125,7 +107,7 @@ function hideOwnerMode() {
     document.getElementById("ownerBar");
 
   if (loginButton)
-    loginButton.style.display = "inline-block";
+  loginButton.style.display = "none";
 
   if (logoutButton)
     logoutButton.style.display = "none";
@@ -208,17 +190,28 @@ function createGameCard(game) {
   card.dataset.category =
     game.category || "adventure";
 
+card.dataset.categories =
+  (game.categories || [game.category || "adventure"]).join(",");
+
   const safeName =
     escapeHTML(game.name || "");
 
   const safeDescription =
     escapeHTML(game.description || "");
 
-  const safeCategory =
-    escapeHTML(game.category || "");
+const gameCategories =
+  game.categories ||
+  (game.category ? [game.category] : []);
+
 
   const thumbnail =
     escapeHTML(game.thumbnail || "");
+
+const thumbnailPositionX =
+  Number(game.thumbnail_position_x ?? 50);
+
+const thumbnailPositionY =
+  Number(game.thumbnail_position_y ?? 50);
 
   const link =
     escapeJS(game.game_link || "");
@@ -234,13 +227,13 @@ function createGameCard(game) {
         : ""
     }
 
-    <img
-      class="game-thumbnail"
-      src="${thumbnail}"
-      alt="${safeName}"
-      onerror="this.style.display='none'"
-    >
-
+<img
+  class="game-thumbnail"
+  src="${thumbnail}"
+  alt="${safeName}"
+  style="object-position: ${thumbnailPositionX}% ${thumbnailPositionY}%;"
+  onerror="this.style.display='none'"
+>
     <div class="game-content">
 
       <h3>${safeName}</h3>
@@ -249,11 +242,15 @@ function createGameCard(game) {
         ${safeDescription}
       </p>
 
-      <div class="tags">
-        <span class="tag">
-          ${safeCategory}
-        </span>
-      </div>
+<div class="tags">
+  ${gameCategories
+    .map(category => `
+      <span class="tag">
+        ${escapeHTML(category)}
+      </span>
+    `)
+    .join("")}
+</div>
 
       <div class="stats">
 
@@ -566,14 +563,40 @@ function openAddGame() {
   document.getElementById("gameThumbnail")
     .value = "";
 
+thumbnailImageData = "";
+
+thumbnailPositionX = 50;
+thumbnailPositionY = 50;
+
+document.getElementById("thumbnailPositionX").value = 50;
+document.getElementById("thumbnailPositionY").value = 50;
+
+const preview =
+  document.getElementById("thumbnailPreview");
+
+if (preview) {
+  preview.src = "";
+  preview.style.display = "none";
+}
+
+const fileInput =
+  document.getElementById("gameThumbnailFile");
+
+if (fileInput) {
+  fileInput.value = "";
+}
+
   document.getElementById("gameDescription")
     .value = "";
 
   document.getElementById("gameLink")
     .value = "";
 
-  document.getElementById("gameCategory")
-    .value = "adventure";
+document
+  .querySelectorAll("#gameCategories input")
+  .forEach(input => {
+    input.checked = input.value === "adventure";
+  });
 
   document.getElementById("gamePlayers")
     .value = "0";
@@ -618,8 +641,36 @@ async function editGame(id) {
   document.getElementById("gameName")
     .value = data.name || "";
 
-  document.getElementById("gameThumbnail")
-    .value = data.thumbnail || "";
+  document.getElementById("gameThumbnail").value =
+  data.thumbnail && !data.thumbnail.startsWith("data:")
+    ? data.thumbnail
+    : "";
+
+thumbnailImageData = data.thumbnail || "";
+
+thumbnailPositionX =
+  Number(data.thumbnail_position_x ?? 50);
+
+thumbnailPositionY =
+  Number(data.thumbnail_position_y ?? 50);
+
+document.getElementById("thumbnailPositionX").value =
+  thumbnailPositionX;
+
+document.getElementById("thumbnailPositionY").value =
+  thumbnailPositionY;
+
+const preview =
+  document.getElementById("thumbnailPreview");
+
+if (preview && data.thumbnail) {
+  preview.src = data.thumbnail;
+
+  preview.style.objectPosition =
+    `${thumbnailPositionX}% ${thumbnailPositionY}%`;
+
+  preview.style.display = "block";
+}
 
   document.getElementById("gameDescription")
     .value = data.description || "";
@@ -627,8 +678,16 @@ async function editGame(id) {
   document.getElementById("gameLink")
     .value = data.game_link || "";
 
-  document.getElementById("gameCategory")
-    .value = data.category || "adventure";
+const selectedCategories =
+  data.categories ||
+  (data.category ? [data.category] : ["adventure"]);
+
+document
+  .querySelectorAll("#gameCategories input")
+  .forEach(input => {
+    input.checked =
+      selectedCategories.includes(input.value);
+  });
 
   document.getElementById("gamePlayers")
     .value = data.players || 0;
@@ -658,9 +717,9 @@ async function saveGame() {
     document.getElementById("gameName")
       .value.trim();
 
-  const thumbnail =
-    document.getElementById("gameThumbnail")
-      .value.trim();
+const thumbnail =
+  thumbnailImageData ||
+  document.getElementById("gameThumbnail").value.trim();
 
   const description =
     document.getElementById("gameDescription")
@@ -670,11 +729,12 @@ async function saveGame() {
     document.getElementById("gameLink")
       .value.trim();
 
-  const category =
-    document.getElementById("gameCategory")
-      .value;
+const categories =
+  [...document.querySelectorAll(
+    "#gameCategories input:checked"
+  )].map(input => input.value);
 
-  const players =
+    const players =
     Number(
       document.getElementById("gamePlayers")
         .value
@@ -703,6 +763,12 @@ async function saveGame() {
     return;
   }
 
+if (categories.length === 0) {
+  errorBox.textContent =
+    "Select at least one category.";
+  return;
+}
+
   if (
     rating < 0 ||
     rating > 100
@@ -713,15 +779,18 @@ async function saveGame() {
   }
 
 
-  const gameData = {
-    name,
-    thumbnail,
-    description,
-    game_link: gameLink,
-    category,
-    players: players || 0,
-    rating: rating || 0
-  };
+const gameData = {
+  name,
+  thumbnail,
+  description,
+  game_link: gameLink,
+  category: categories[0],
+  categories,
+  players: players || 0,
+  rating: rating || 0,
+  thumbnail_position_x: thumbnailPositionX,
+  thumbnail_position_y: thumbnailPositionY
+};
 
 
   let result;
@@ -835,8 +904,7 @@ function applyFilters() {
       .value.toLowerCase();
 
   const category =
-    document.getElementById("category")
-      .value;
+    document.getElementById("category").value;
 
   document
     .querySelectorAll(".game")
@@ -846,9 +914,14 @@ function applyFilters() {
         game.dataset.name
           .includes(search);
 
+      const gameCategories =
+        game.dataset.categories
+          ? game.dataset.categories.split(",")
+          : [game.dataset.category];
+
       const matchesCategory =
         category === "all" ||
-        game.dataset.category === category;
+        gameCategories.includes(category);
 
       game.style.display =
         matchesSearch &&
@@ -889,16 +962,6 @@ function openGame(url) {
    MODALS
 ================================ */
 
-function openLogin() {
-  document.getElementById("loginModal")
-    .style.display = "flex";
-}
-
-
-function closeLogin() {
-  document.getElementById("loginModal")
-    .style.display = "none";
-}
 
 
 function closeGameModal() {
@@ -939,27 +1002,154 @@ function escapeJS(value) {
 supabaseClient.auth.onAuthStateChange(
   async (event, session) => {
 
-    if (
-      session &&
-      session.user
-    ) {
+if (
+  session &&
+  session.user
+) {
 
-      owner = true;
+  owner =
+    session.user.email?.toLowerCase() ===
+    OWNER_EMAIL.toLowerCase();
 
-      showOwnerMode();
+  if (owner) {
+    showOwnerMode();
+  } else {
+    hideOwnerMode();
+  }
 
-    } else {
+} else {
 
-      owner = false;
+  owner = false;
 
-      hideOwnerMode();
+  hideOwnerMode();
 
-    }
+}
 
     await loadGames();
   }
 );
 
+
+function setupThumbnailInput() {
+  const urlInput =
+    document.getElementById("gameThumbnail");
+
+  const fileInput =
+    document.getElementById("gameThumbnailFile");
+
+  const pasteArea =
+    document.getElementById("thumbnailPasteArea");
+
+  const preview =
+    document.getElementById("thumbnailPreview");
+
+const positionXInput =
+    document.getElementById("thumbnailPositionX");
+
+const positionYInput =
+    document.getElementById("thumbnailPositionY");
+
+  if (!urlInput || !fileInput || !pasteArea || !preview) {
+    return;
+  }
+
+function showPreview(src) {
+  if (!src) {
+    preview.style.display = "none";
+    preview.src = "";
+    return;
+  }
+
+  preview.src = src;
+
+  preview.style.objectPosition =
+    `${thumbnailPositionX}% ${thumbnailPositionY}%`;
+
+  preview.style.display = "block";
+}
+
+  urlInput.addEventListener("input", () => {
+    thumbnailImageData = urlInput.value.trim();
+    showPreview(thumbnailImageData);
+  });
+
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image.");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      thumbnailImageData = reader.result;
+      urlInput.value = "";
+      showPreview(thumbnailImageData);
+    };
+
+    reader.readAsDataURL(file);
+  });
+
+  pasteArea.addEventListener("paste", event => {
+    const items = event.clipboardData.items;
+
+    for (const item of items) {
+      if (!item.type.startsWith("image/")) {
+        continue;
+      }
+
+      const file = item.getAsFile();
+
+      if (!file) continue;
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        thumbnailImageData = reader.result;
+        urlInput.value = "";
+        showPreview(thumbnailImageData);
+      };
+
+      reader.readAsDataURL(file);
+
+            event.preventDefault();
+      break;
+    }
+  });
+
+
+  if (positionXInput) {
+    positionXInput.addEventListener("input", () => {
+
+      thumbnailPositionX =
+        Number(positionXInput.value);
+
+      preview.style.objectPosition =
+        `${thumbnailPositionX}% ${thumbnailPositionY}%`;
+    });
+  }
+
+
+  if (positionYInput) {
+    positionYInput.addEventListener("input", () => {
+
+      thumbnailPositionY =
+        Number(positionYInput.value);
+
+      preview.style.objectPosition =
+        `${thumbnailPositionX}% ${thumbnailPositionY}%`;
+    });
+  }
+
+}
+
+
+
+setupThumbnailInput();
 
 window.addEventListener("pageshow", () => {
   const searchBox = document.getElementById("searchBox");
@@ -968,3 +1158,151 @@ window.addEventListener("pageshow", () => {
     searchBox.value = "";
   }
 });
+
+const searchBox =
+  document.getElementById("searchBox");
+
+if (searchBox) {
+
+  searchBox.addEventListener("input", () => {
+
+    const value =
+      searchBox.value.trim().toLowerCase();
+
+    if (value === OWNER_EMAIL.toLowerCase()) {
+      searchBox.value = "";
+      openOwnerLogin();
+      return;
+    }
+
+    filterGames();
+  });
+}
+
+function openOwnerLogin() {
+  const modal =
+    document.getElementById("ownerLoginModal");
+
+  const password =
+    document.getElementById("ownerPassword");
+
+  const error =
+    document.getElementById("ownerLoginError");
+
+  if (!modal || !password) return;
+
+  password.value = "";
+
+  if (error) {
+    error.textContent = "";
+  }
+
+  modal.style.display = "flex";
+
+  setTimeout(() => {
+    password.focus();
+  }, 50);
+}
+
+
+function closeOwnerLogin() {
+  const modal =
+    document.getElementById("ownerLoginModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+
+async function loginAsOwner() {
+  const password =
+    document.getElementById("ownerPassword").value;
+
+  const error =
+    document.getElementById("ownerLoginError");
+
+  if (!password) {
+    if (error) {
+      error.textContent = "Enter your password.";
+    }
+
+    return;
+  }
+
+  const { error: loginError } =
+    await supabaseClient.auth.signInWithPassword({
+      email: OWNER_EMAIL,
+      password: password
+    });
+
+  if (loginError) {
+    if (error) {
+      error.textContent = "Incorrect password.";
+    }
+
+    return;
+  }
+
+  owner = true;
+
+  closeOwnerLogin();
+  showOwnerMode();
+
+  await loadGames();
+}
+
+const ownerLoginButton =
+  document.getElementById("ownerLoginButton");
+
+if (ownerLoginButton) {
+  ownerLoginButton.addEventListener(
+    "click",
+    loginAsOwner
+  );
+}
+
+
+const ownerPassword =
+  document.getElementById("ownerPassword");
+
+if (ownerPassword) {
+  ownerPassword.addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key === "Enter") {
+        loginAsOwner();
+      }
+
+    }
+  );
+}
+
+
+const closeOwnerLoginButton =
+  document.getElementById("closeOwnerLogin");
+
+if (closeOwnerLoginButton) {
+  closeOwnerLoginButton.addEventListener(
+    "click",
+    closeOwnerLogin
+  );
+}
+
+
+const ownerLoginModal =
+  document.getElementById("ownerLoginModal");
+
+if (ownerLoginModal) {
+  ownerLoginModal.addEventListener(
+    "click",
+    event => {
+
+      if (event.target === ownerLoginModal) {
+        closeOwnerLogin();
+      }
+
+    }
+  );
+}

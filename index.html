@@ -24,9 +24,6 @@
     <a href="#games">Games</a>
     <a href="#popular">Popular</a>
 
-    <button id="loginButton" onclick="openLogin()">
-      Owner Login
-    </button>
 
     <button id="logoutButton" onclick="logout()" style="display:none;">
       Logout
@@ -63,7 +60,6 @@
   autocomplete="off"
   readonly
   onfocus="this.removeAttribute('readonly')"
-  oninput="searchGames()"
 >
 
     <button onclick="searchGames()">
@@ -111,42 +107,6 @@
 
 <!-- LOGIN -->
 
-<div id="loginModal" class="modal">
-
-  <div class="modal-box">
-
-    <h2>Owner Login</h2>
-
-    <p>
-      Sign in to manage RobloxList.
-    </p>
-
-    <input
-      id="loginEmail"
-      type="email"
-      placeholder="Email"
-    >
-
-    <input
-      id="loginPassword"
-      type="password"
-      placeholder="Password"
-    >
-
-    <div id="loginError" class="error"></div>
-
-    <button onclick="login()">
-      Sign In
-    </button>
-
-    <button class="secondary" onclick="closeLogin()">
-      Cancel
-    </button>
-
-  </div>
-
-</div>
-
 
 <!-- ADD / EDIT -->
 
@@ -163,10 +123,63 @@
       placeholder="Game name"
     >
 
+<div class="thumbnail-input-group">
+  <label for="gameThumbnail">Game Thumbnail</label>
+
+  <input
+    id="gameThumbnail"
+    type="url"
+    placeholder="Paste an image URL..."
+  >
+
+  <input
+    id="gameThumbnailFile"
+    type="file"
+    accept="image/*"
+  >
+
+  <div
+    id="thumbnailPasteArea"
+    class="thumbnail-paste-area"
+    tabindex="0"
+  >
+    📋 Paste an image here
+  </div>
+
+<img
+  id="thumbnailPreview"
+  class="thumbnail-preview"
+  style="display:none;"
+  alt="Thumbnail preview"
+>
+
+<div id="thumbnailPositionControls" class="thumbnail-position-controls">
+
+  <label>
+    Thumbnail Horizontal Position
     <input
-      id="gameThumbnail"
-      placeholder="Thumbnail image URL"
+      id="thumbnailPositionX"
+      type="range"
+      min="0"
+      max="100"
+      value="50"
     >
+  </label>
+
+  <label>
+    Thumbnail Vertical Position
+    <input
+      id="thumbnailPositionY"
+      type="range"
+      min="0"
+      max="100"
+      value="50"
+    >
+  </label>
+
+</div>
+
+</div>
 
     <textarea
       id="gameDescription"
@@ -178,33 +191,39 @@
       placeholder="Roblox game URL"
     >
 
-    <select id="gameCategory">
+    <div id="gameCategories" class="game-categories">
 
-      <option value="adventure">
-        Adventure
-      </option>
+  <label>
+    <input type="checkbox" value="adventure">
+    Adventure
+  </label>
 
-      <option value="simulator">
-        Simulator
-      </option>
+  <label>
+    <input type="checkbox" value="simulator">
+    Simulator
+  </label>
 
-      <option value="roleplay">
-        Roleplay
-      </option>
+  <label>
+    <input type="checkbox" value="roleplay">
+    Roleplay
+  </label>
 
-      <option value="horror">
-        Horror
-      </option>
+  <label>
+    <input type="checkbox" value="horror">
+    Horror
+  </label>
 
-      <option value="obby">
-        Obby
-      </option>
+  <label>
+    <input type="checkbox" value="obby">
+    Obby
+  </label>
 
-      <option value="pvp">
-        PvP
-      </option>
+  <label>
+    <input type="checkbox" value="pvp">
+    PvP
+  </label>
 
-    </select>
+</div>
 
     <input
       id="gamePlayers"
@@ -237,7 +256,42 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- OWNER LOGIN -->
+
+<div id="ownerLoginModal" class="owner-login-modal" style="display:none;">
+  <div class="owner-login-box">
+
+    <button
+      id="closeOwnerLogin"
+      class="owner-login-close"
+      type="button"
+    >
+      ×
+    </button>
+
+    <h2>Owner Login</h2>
+
+    <input
+      id="ownerPassword"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button
+      id="ownerLoginButton"
+      class="owner-login-arrow"
+      type="button"
+    >
+      →
+    </button>
+
+    <div id="ownerLoginError"></div>
+
+  </div>
+</div>
+
+
 <script src="app.js"></script>
 
 </body>

@@ -1159,25 +1159,33 @@ window.addEventListener("pageshow", () => {
   }
 });
 
-const searchBox =
-  document.getElementById("searchBox");
+document.addEventListener("DOMContentLoaded", () => {
+  const searchBox = document.getElementById("searchBox");
 
-if (searchBox) {
+  if (!searchBox) return;
 
-  searchBox.addEventListener("input", () => {
-
-    const value =
-      searchBox.value.trim().toLowerCase();
+  function checkOwnerSearch() {
+    const value = searchBox.value.trim().toLowerCase();
 
     if (value === OWNER_EMAIL.toLowerCase()) {
       searchBox.value = "";
       openOwnerLogin();
-      return;
+      return true;
     }
 
+    return false;
+  }
+
+  searchBox.addEventListener("input", () => {
+    if (checkOwnerSearch()) return;
     filterGames();
   });
-}
+
+  searchBox.addEventListener("keyup", () => {
+    checkOwnerSearch();
+  });
+});
+
 
 function openOwnerLogin() {
   const modal =

@@ -27,9 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("searchBox").value = "";
 
   await checkLogin();
-  await loadGames();
 });
-
 
 /* ================================
    AUTH
@@ -66,8 +64,6 @@ async function logout() {
   owner = false;
 
   hideOwnerMode();
-
-  await loadGames();
 }
 
 
@@ -1254,10 +1250,8 @@ async function loginAsOwner() {
 
   owner = true;
 
-  closeOwnerLogin();
-  showOwnerMode();
-
-  await loadGames();
+closeOwnerLogin();
+showOwnerMode();
 }
 
 const ownerLoginButton =

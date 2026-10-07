@@ -131,7 +131,22 @@ async function loadGames() {
     error
   } = await supabaseClient
     .from("games")
-    .select("*")
+.select(`
+  id,
+  name,
+  thumbnail,
+  video_url,
+  description,
+  categories,
+  category,
+  players,
+  rating,
+  game_link,
+  sort_order,
+  thumbnail_position_x,
+  thumbnail_position_y,
+  created_at
+`)
     .order("sort_order", {
       ascending: true
     })
@@ -166,6 +181,8 @@ async function loadGames() {
   setupDragAndDrop();
 
   applyFilters();
+
+  setupVideoOptimization();
 }
 
 
@@ -203,6 +220,8 @@ const gameCategories =
   const thumbnail =
     escapeHTML(game.thumbnail || "");
 
+const video = escapeHTML(game.video_url || "");
+
 const thumbnailPositionX =
   Number(game.thumbnail_position_x ?? 50);
 
@@ -223,13 +242,25 @@ const thumbnailPositionY =
         : ""
     }
 
+${video ? `
+<video
+  class="game-thumbnail game-video"  src="${video}"
+  poster="${thumbnail}"
+  muted
+  autoplay
+  loop
+  playsinline
+  preload="metadata"
+></video>
+` : `
 <img
   class="game-thumbnail"
   src="${thumbnail}"
-  alt="${safeName}"
-  style="object-position: ${thumbnailPositionX}% ${thumbnailPositionY}%;"
-  onerror="this.style.display='none'"
+  alt="${escapeHTML(game.name || "")}"
+  style="object-position:${thumbnailPositionX}% ${thumbnailPositionY}%"
 >
+`}
+
     <div class="game-content">
 
       <h3>${safeName}</h3>
@@ -557,7 +588,10 @@ function openAddGame() {
     .value = "";
 
   document.getElementById("gameThumbnail")
-    .value = "";
+  .value = "";
+
+document.getElementById("gameVideo")
+  .value = "";
 
 thumbnailImageData = "";
 
@@ -641,6 +675,9 @@ async function editGame(id) {
   data.thumbnail && !data.thumbnail.startsWith("data:")
     ? data.thumbnail
     : "";
+
+document.getElementById("gameVideo").value =
+  data.video_url || "";
 
 thumbnailImageData = data.thumbnail || "";
 
@@ -778,6 +815,7 @@ if (categories.length === 0) {
 const gameData = {
   name,
   thumbnail,
+video_url: document.getElementById("gameVideo").value.trim(),
   description,
   game_link: gameLink,
   category: categories[0],
@@ -1069,28 +1107,53 @@ function showPreview(src) {
     showPreview(thumbnailImageData);
   });
 
-  fileInput.addEventListener("change", () => {
-    const file = fileInput.files[0];
+fileInput.addEventListener("change", async () => {
+  const file = fileInput.files[0];
 
-    if (!file) return;
+  if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      alert("Please select an image.");
-      return;
-    }
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image.");
+    return;
+  }
 
-    const reader = new FileReader();
+  if (!owner) {
+    alert("Owner login required.");
+    return;
+  }
 
-    reader.onload = () => {
-      thumbnailImageData = reader.result;
-      urlInput.value = "";
-      showPreview(thumbnailImageData);
-    };
+  const fileName =
+    `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.name}`;
 
-    reader.readAsDataURL(file);
-  });
+  const filePath =
+    `thumbnails/${fileName}`;
 
-  pasteArea.addEventListener("paste", event => {
+  const { error } =
+    await supabaseClient.storage
+      .from("game-thumbnails")
+      .upload(filePath, file, {
+        cacheControl: "31536000",
+        upsert: false
+      });
+
+  if (error) {
+    alert("Could not upload thumbnail: " + error.message);
+    return;
+  }
+
+  const { data } =
+    supabaseClient.storage
+      .from("game-thumbnails")
+      .getPublicUrl(filePath);
+
+  thumbnailImageData = data.publicUrl;
+
+  urlInput.value = thumbnailImageData;
+
+  showPreview(thumbnailImageData);
+});
+
+  pasteArea.addEventListener("paste", async event => {
     const items = event.clipboardData.items;
 
     for (const item of items) {
@@ -1102,21 +1165,57 @@ function showPreview(src) {
 
       if (!file) continue;
 
-      const reader = new FileReader();
+      event.preventDefault();
 
-      reader.onload = () => {
-        thumbnailImageData = reader.result;
-        urlInput.value = "";
-        showPreview(thumbnailImageData);
-      };
+      if (!owner) {
+        alert("Owner login required.");
+        return;
+      }
 
-      reader.readAsDataURL(file);
+      const extension =
+        file.type === "image/png" ? "png" :
+        file.type === "image/webp" ? "webp" :
+        file.type === "image/gif" ? "gif" :
+        "jpg";
 
-            event.preventDefault();
+      const fileName =
+        `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+
+      const filePath =
+        `thumbnails/${fileName}`;
+
+      const { error } =
+        await supabaseClient.storage
+          .from("game-thumbnails")
+          .upload(filePath, file, {
+            cacheControl: "31536000",
+            upsert: false
+          });
+
+      if (error) {
+        alert(
+          "Could not upload pasted thumbnail: " +
+          error.message
+        );
+        return;
+      }
+
+      const { data } =
+        supabaseClient.storage
+          .from("game-thumbnails")
+          .getPublicUrl(filePath);
+
+      thumbnailImageData =
+        data.publicUrl;
+
+      urlInput.value =
+        thumbnailImageData;
+
+      showPreview(thumbnailImageData);
+
       break;
     }
   });
-
 
   if (positionXInput) {
     positionXInput.addEventListener("input", () => {
@@ -1307,4 +1406,151 @@ if (ownerLoginModal) {
 
     }
   );
+}
+
+function setupVideoOptimization() {
+  const videos = document.querySelectorAll(".game-video");
+
+  if (!videos.length) return;
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        const video = entry.target;
+
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    },
+    {
+      root: null,
+      rootMargin: "200px 0px",
+      threshold: 0.1
+    }
+  );
+
+  videos.forEach(video => {
+    observer.observe(video);
+  });
+}
+
+async function migrateBase64Thumbnails() {
+  if (!owner) {
+    alert("Owner login required.");
+    return;
+  }
+
+  const { data: games, error } = await supabaseClient
+    .from("games")
+    .select("id, name, thumbnail")
+    .like("thumbnail", "data:image/%");
+
+  if (error) {
+    alert("Could not load Base64 thumbnails: " + error.message);
+    return;
+  }
+
+  if (!games || games.length === 0) {
+    alert("No Base64 thumbnails found.");
+    return;
+  }
+
+  for (const game of games) {
+    try {
+      const match = game.thumbnail.match(
+        /^data:(image\/[^;]+);base64,(.+)$/
+      );
+
+      if (!match) {
+        console.warn("Skipping invalid Base64 thumbnail:", game.id);
+        continue;
+      }
+
+      const mimeType = match[1];
+      const base64Data = match[2];
+
+      const byteCharacters = atob(base64Data);
+      const byteArray = new Uint8Array(byteCharacters.length);
+
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArray[i] = byteCharacters.charCodeAt(i);
+      }
+
+      const extension =
+        mimeType === "image/png" ? "png" :
+        mimeType === "image/jpeg" ? "jpg" :
+        mimeType === "image/webp" ? "webp" :
+        mimeType === "image/gif" ? "gif" :
+        "img";
+
+      const fileName =
+        `migrated-${game.id}-${Date.now()}.${extension}`;
+
+      const filePath =
+        `thumbnails/${fileName}`;
+
+      const file = new File(
+        [byteArray],
+        fileName,
+        { type: mimeType }
+      );
+
+      const { error: uploadError } =
+        await supabaseClient.storage
+          .from("game-thumbnails")
+          .upload(filePath, file, {
+            cacheControl: "31536000",
+            upsert: false
+          });
+
+      if (uploadError) {
+        console.error(
+          "Upload failed for game:",
+          game.id,
+          uploadError
+        );
+        continue;
+      }
+
+      const { data: publicUrlData } =
+        supabaseClient.storage
+          .from("game-thumbnails")
+          .getPublicUrl(filePath);
+
+      const publicUrl =
+        publicUrlData.publicUrl;
+
+      const { error: updateError } =
+        await supabaseClient
+          .from("games")
+          .update({
+            thumbnail: publicUrl
+          })
+          .eq("id", game.id);
+
+      if (updateError) {
+        console.error(
+          "Database update failed for game:",
+          game.id,
+          updateError
+        );
+        continue;
+      }
+
+      console.log(
+        `Migrated game ${game.id} (${game.name}) successfully.`
+      );
+    } catch (error) {
+      console.error(
+        "Migration failed for game:",
+        game.id,
+        error
+      );
+    }
+  }
+
+  alert("Base64 thumbnail migration finished. Check the console for details.");
 }

@@ -1461,7 +1461,3 @@ main {
   }
 }
 
-#gameList.games {
-  background: red !important;
-  outline: 8px solid yellow !important;
-}

@@ -1034,33 +1034,79 @@ main {
   }
 }
 
+/* ===== FINAL ROBLOXLIST LAYOUT ===== */
 
+/* Use the available page width */
+main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 30px auto !important;
+  padding: 0 3% !important;
+}
 
-/* FINAL GAME GRID FIX */
-
-/* Desktop: exactly 5 columns */
+/* Five large columns on desktop */
 #gameList.games {
   display: grid !important;
   grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   width: 100% !important;
   max-width: none !important;
-  gap: 20px;
-  padding: 12px;
-  margin: 0 auto;
+  margin: 0 auto !important;
+  padding: 12px 0 !important;
+  gap: 22px !important;
 }
 
-/* Larger thumbnails */
+/* Larger cards and images */
+#gameList.games .game {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 360px;
+}
+
 #gameList.games .game-thumbnail {
   display: block;
   width: 100%;
   height: 220px;
+  flex-shrink: 0;
   object-fit: cover;
 }
 
-/* Medium screens: 3 columns */
+/* Center the heading, description, and search */
+.hero {
+  width: 100%;
+  text-align: center !important;
+  padding: 65px 4% 55px !important;
+}
+
+.hero h1 {
+  width: 100%;
+  text-align: center !important;
+  margin: 0 auto 12px !important;
+}
+
+.hero p {
+  max-width: 750px !important;
+  text-align: center !important;
+  margin: 0 auto 25px !important;
+}
+
+.search {
+  display: flex;
+  width: 100% !important;
+  max-width: 750px !important;
+  margin: 0 auto !important;
+}
+
+.search input {
+  min-width: 0;
+}
+
+/* Medium screens: three columns */
 @media (min-width: 700px) and (max-width: 1199px) {
   #gameList.games {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 16px !important;
   }
 
   #gameList.games .game-thumbnail {
@@ -1068,54 +1114,39 @@ main {
   }
 }
 
-/* Mobile: 2 columns */
+/* Mobile: two columns */
 @media (max-width: 699px) {
-  #gameList.games {
-
-/* FORCE 5 GAME COLUMNS ON DESKTOP */
-
-#gameList.games {
-  display: grid !important;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  width: 100% !important;
-  max-width: none !important;
-  gap: 20px;
-  padding: 12px;
-  margin: 0 auto;
-}
-
-/* Larger game cards and thumbnails */
-
-#gameList.games .game-thumbnail {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-}
-
-/* 3 columns on medium screens */
-
-@media (min-width: 700px) and (max-width: 1199px) {
-  #gameList.games {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  main {
+    padding: 0 10px !important;
   }
-}
 
-/* 2 columns on mobile */
-
-@media (max-width: 699px) {
   #gameList.games {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px;
-    padding: 10px;
+    gap: 10px !important;
+  }
+
+  #gameList.games .game {
+    min-height: 0;
   }
 
   #gameList.games .game-thumbnail {
     height: 135px;
   }
+
+  #gameList.games .game-content {
+    padding: 10px;
+  }
+
+  .hero {
+    padding: 45px 5% !important;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
 }
 
-/* 1 column on very small phones */
-
+/* Very small phones: one column */
 @media (max-width: 380px) {
   #gameList.games {
     grid-template-columns: 1fr !important;
@@ -1126,146 +1157,3 @@ main {
   }
 }
 
-/* Center the hero heading, description, and search bar */
-.hero {
-  text-align: center;
-}
-
-.hero h1,
-.hero p {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.hero p {
-  max-width: 750px;
-}
-
-.search {
-  width: 100%;
-  max-width: 750px;
-  margin: 0 auto;
-}
-
-
-
-/* ROBLOXLIST — 5 LARGE COLUMNS */
-
-.games {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: none;
-  margin: 0 auto;
-  padding: 12px;
-  align-items: stretch;
-}
-
-.game {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 350px;
-}
-
-.game-thumbnail {
-  display: block;
-  width: 100%;
-  height: 220px;
-  flex-shrink: 0;
-  object-fit: cover;
-  background: #0c1219;
-}
-
-.game-content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-}
-
-.game-content h3 {
-  font-size: 18px;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-
-.game-content .description {
-  font-size: 13px;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
-}
-
-.stats {
-  margin-top: auto;
-}
-
-.play-button {
-  min-height: 40px;
-}
-
-/* MEDIUM SCREENS */
-@media (min-width: 700px) and (max-width: 1199px) {
-  .games {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .game-thumbnail {
-    height: 180px;
-  }
-}
-
-/* MOBILE */
-@media (max-width: 699px) {
-  .games {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    padding: 10px;
-  }
-
-  .game {
-    min-height: 0;
-  }
-
-  .game-thumbnail {
-    height: 135px;
-  }
-
-  .game-content {
-    padding: 10px;
-    gap: 8px;
-  }
-
-  .game-content h3 {
-    font-size: 15px;
-  }
-
-  .game-content .description {
-    font-size: 12px;
-  }
-
-  .owner-controls {
-    padding: 0 8px 8px;
-    gap: 4px;
-  }
-
-  .owner-controls button {
-    padding: 6px 3px;
-    font-size: 11px;
-  }
-}
-
-/* VERY SMALL PHONES */
-@media (max-width: 380px) {
-  .games {
-    grid-template-columns: 1fr;
-  }
-
-  .game-thumbnail {
-    height: 200px;
-  }
-}

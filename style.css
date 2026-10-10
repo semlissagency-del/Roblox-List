@@ -1157,3 +1157,162 @@ main {
   }
 }
 
+/* ROBLOXLIST — IMAGE-FOCUSED GAME CARDS */
+
+/* Five columns on desktop */
+#gameList.games {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  max-width: none !important;
+  padding: 12px 0 !important;
+  gap: 22px !important;
+}
+
+/* Card design */
+#gameList.games .game {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #292929;
+  border: 2px solid #454545;
+  border-radius: 28px;
+}
+
+/* Large image with rounded top corners */
+#gameList.games .game-thumbnail {
+  display: block;
+  width: 100%;
+  height: auto !important;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 26px 26px 0 0;
+}
+
+/* Hide descriptions */
+#gameList.games .description {
+  display: none !important;
+}
+
+/* Large black game-name panel */
+#gameList.games .game-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 14px;
+}
+
+/* Game title */
+#gameList.games .game-content h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  margin: 0;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border-radius: 30px;
+  font-size: clamp(18px, 2vw, 36px);
+  font-weight: 800;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Hide public category tags */
+#gameList.games .tags,
+#gameList.games .tag {
+  display: none !important;
+}
+
+/* Players and rating panels */
+#gameList.games .stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  margin-top: auto;
+  padding: 16px 8px;
+  border: none;
+  border-radius: 28px;
+  background: #101a25;
+  font-size: clamp(13px, 1.5vw, 28px);
+  font-weight: 600;
+}
+
+/* Player count */
+#gameList.games .players {
+  color: #35d07f;
+}
+
+/* Rating */
+#gameList.games .rating {
+  color: #ffd34e;
+}
+
+/* Play button */
+#gameList.games .play-button {
+  min-height: 48px;
+  margin-top: 0;
+  border-radius: 14px;
+}
+
+/* Owner controls */
+#gameList.games .owner-controls {
+  position: static;
+  padding: 10px 14px 14px;
+  border: none;
+}
+
+/* Medium screens */
+@media (min-width: 700px) and (max-width: 1199px) {
+  #gameList.games {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  #gameList.games .game-thumbnail {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Mobile */
+@media (max-width: 699px) {
+  #gameList.games {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  #gameList.games .game-content {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  #gameList.games .game-content h3 {
+    min-height: 55px;
+    padding: 8px;
+    border-radius: 18px;
+    font-size: 17px;
+  }
+
+  #gameList.games .stats {
+    flex-direction: column;
+    padding: 10px 5px;
+    border-radius: 18px;
+    font-size: 14px;
+  }
+
+  #gameList.games .play-button {
+    min-height: 38px;
+    font-size: 12px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  #gameList.games {
+    grid-template-columns: 1fr !important;
+  }
+}

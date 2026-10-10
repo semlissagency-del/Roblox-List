@@ -1316,3 +1316,149 @@ main {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* FORCE THE REFERENCE-IMAGE GAME CARD DESIGN */
+
+#gameList.games .game {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #292929 !important;
+  border: 3px solid #454545 !important;
+  border-radius: 32px !important;
+  gap: 0 !important;
+}
+
+/* Large square thumbnail */
+#gameList.games .game-thumbnail {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  border-radius: 28px 28px 0 0 !important;
+}
+
+/* Card content */
+#gameList.games .game-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 22px !important;
+  padding: 12px 20px 20px !important;
+}
+
+/* Large black title panel */
+#gameList.games .game-content h3 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100px !important;
+  padding: 12px !important;
+  margin: 0 !important;
+  background: #000 !important;
+  color: #fff !important;
+  border-radius: 55px !important;
+  font-size: clamp(20px, 2.5vw, 42px) !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+}
+
+/* Hide description and public categories */
+#gameList.games .description,
+#gameList.games .tags,
+#gameList.games .tag {
+  display: none !important;
+}
+
+/* Large player and rating panels */
+#gameList.games .stats {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 20px 8px !important;
+  border: none !important;
+  border-radius: 50px !important;
+  background: #101a25 !important;
+  font-size: clamp(13px, 1.8vw, 30px) !important;
+  white-space: nowrap !important;
+}
+
+/* Player count and rating */
+#gameList.games .players {
+  color: #35d07f !important;
+}
+
+#gameList.games .rating {
+  color: #ffd34e !important;
+}
+
+/* Hide Play Game button to match reference */
+#gameList.games .play-button {
+  display: none !important;
+}
+
+/* Keep owner edit/delete controls available */
+#gameList.games .owner-controls {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  padding: 10px 15px !important;
+}
+
+/* Five columns on desktop */
+@media (min-width: 1200px) {
+  #gameList.games {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+  }
+}
+
+/* Three columns on medium screens */
+@media (min-width: 700px) and (max-width: 1199px) {
+  #gameList.games {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  #gameList.games .game-content {
+    padding: 10px !important;
+    gap: 12px !important;
+  }
+
+  #gameList.games .game-content h3 {
+    min-height: 65px !important;
+    font-size: 22px !important;
+  }
+}
+
+/* Two columns on phones */
+@media (max-width: 699px) {
+  #gameList.games {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  #gameList.games .game-content {
+    padding: 8px !important;
+    gap: 8px !important;
+  }
+
+  #gameList.games .game-content h3 {
+    min-height: 55px !important;
+    border-radius: 25px !important;
+    font-size: 17px !important;
+  }
+
+  #gameList.games .stats {
+    flex-direction: column !important;
+    padding: 10px 4px !important;
+    border-radius: 24px !important;
+    font-size: 13px !important;
+    white-space: normal !important;
+  }
+}
+
+

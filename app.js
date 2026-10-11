@@ -1154,67 +1154,94 @@ fileInput.addEventListener("change", async () => {
 });
 
  
-  async function handleThumbnailPaste(event) {
-    const items = event.clipboardData?.items;
-    if (!items) return;
 
-    const imageItem = [...items].find(item =>
-      item.type.startsWith("image/")
-    );
+async function handleThumbnailPaste(event) {
+  const clipboard = event.clipboardData;
+  if (!clipboard) return;
 
-    if (!imageItem) return;
+  const items = Array.from(clipboard.items || []);
+  const imageItem = items.find(item =>
+    item.type.startsWith("image/")
+  );
 
-    event.preventDefault();
+  if (!imageItem) {
+    const pastedText = clipboard.getData("text/plain").trim();
 
-    if (!owner) {
-      alert("Owner login required.");
-      return;
+    if (pastedText && /^https?:\/\/\S+$/i.test(pastedText)) {
+      event.preventDefault();
+
+      urlInput.value = pastedText;
+      thumbnailImageData = pastedText;
+      showPreview(pastedText);
     }
 
-    const file = imageItem.getAsFile();
-    if (!file) return;
-
-    const errorBox = document.getElementById("gameError");
-    if (errorBox) errorBox.textContent = "Uploading thumbnail...";
-
-    const extension = file.type.split("/")[1]?.replace("jpeg", "jpg") || "png";
-    const filePath = `thumbnails/${Date.now()}-${crypto.randomUUID()}.${extension}`;
-
-    try {
-      const { error } = await supabaseClient.storage
-        .from("game-thumbnails")
-        .upload(filePath, file, {
-          cacheControl: "31536000",
-          upsert: false,
-          contentType: file.type
-        });
-
-      if (error) throw error;
-
-      const { data } = supabaseClient.storage
-        .from("game-thumbnails")
-        .getPublicUrl(filePath);
-
-      thumbnailImageData = data.publicUrl;
-      urlInput.value = thumbnailImageData;
-      showPreview(thumbnailImageData);
-
-      if (errorBox) errorBox.textContent = "";
-    } catch (error) {
-      console.error("Thumbnail paste failed:", error);
-      if (errorBox) {
-        errorBox.textContent = "Thumbnail upload failed: " + error.message;
-      } else {
-        alert("Thumbnail upload failed: " + error.message);
-      }
-    }
+    return;
   }
 
+  event.preventDefault();
 
-  document.getElementById("gameModal").addEventListener(
-    "paste",
-    handleThumbnailPaste
-  );
+  if (!owner) {
+    alert("Owner login required.");
+    return;
+  }
+
+  const file = imageItem.getAsFile();
+  if (!file) {
+    alert("Could not read the copied image. Try copying it again.");
+    return;
+  }
+
+  const errorBox = document.getElementById("gameError");
+  if (errorBox) errorBox.textContent = "Uploading thumbnail...";
+
+  const extension =
+    file.type.split("/")[1]?.replace("jpeg", "jpg") || "png";
+
+  const filePath =
+    `thumbnails/${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+
+  try {
+    const { error } = await supabaseClient.storage
+      .from("game-thumbnails")
+      .upload(filePath, file, {
+        cacheControl: "31536000",
+        upsert: false,
+        contentType: file.type
+      });
+
+    if (error) throw error;
+
+    const { data } = supabaseClient.storage
+      .from("game-thumbnails")
+      .getPublicUrl(filePath);
+
+    thumbnailImageData = data.publicUrl;
+    urlInput.value = data.publicUrl;
+    showPreview(data.publicUrl);
+
+    if (errorBox) errorBox.textContent = "";
+  } catch (error) {
+    console.error("Thumbnail paste failed:", error);
+
+    if (errorBox) {
+      errorBox.textContent =
+        "Thumbnail upload failed: " + error.message;
+    }
+  }
+}
+
+
+  
+const pasteArea = document.getElementById("thumbnailPasteArea");
+
+if (pasteArea) {
+  pasteArea.addEventListener("click", () => {
+    pasteArea.focus();
+  });
+
+  pasteArea.addEventListener("paste", handleThumbnailPaste);
+}
+
 
   if (positionXInput) {
     positionXInput.addEventListener("input", () => {

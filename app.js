@@ -1256,10 +1256,6 @@ document.addEventListener("paste", event => {
 });
 
 
-  pasteArea.addEventListener("paste", handleThumbnailPaste);
-}
-
-
   if (positionXInput) {
     positionXInput.addEventListener("input", () => {
 

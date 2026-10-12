@@ -1153,7 +1153,6 @@ fileInput.addEventListener("change", async () => {
   showPreview(thumbnailImageData);
 });
 
- 
 
 async function handleThumbnailPaste(event) {
   const clipboard = event.clipboardData;

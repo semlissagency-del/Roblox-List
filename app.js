@@ -1422,29 +1422,48 @@ if (ownerPassword) {
 const closeOwnerLoginButton =
   document.getElementById("closeOwnerLogin");
 
-if (closeOwnerLoginButton) {
-  closeOwnerLoginButton.addEventListener(
-    "click",
-    closeOwnerLogin
-  );
-}
 
+document.addEventListener("DOMContentLoaded", () => {
+  const ownerLoginButton =
+    document.getElementById("ownerLoginButton");
 
-const ownerLoginModal =
-  document.getElementById("ownerLoginModal");
+  if (ownerLoginButton) {
+    ownerLoginButton.addEventListener("click", loginAsOwner);
+  }
 
-if (ownerLoginModal) {
-  ownerLoginModal.addEventListener(
-    "click",
-    event => {
+  const ownerPassword =
+    document.getElementById("ownerPassword");
 
+  if (ownerPassword) {
+    ownerPassword.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        loginAsOwner();
+      }
+    });
+  }
+
+  const closeOwnerLoginButton =
+    document.getElementById("closeOwnerLogin");
+
+  if (closeOwnerLoginButton) {
+    closeOwnerLoginButton.addEventListener(
+      "click",
+      closeOwnerLogin
+    );
+  }
+
+  const ownerLoginModal =
+    document.getElementById("ownerLoginModal");
+
+  if (ownerLoginModal) {
+    ownerLoginModal.addEventListener("click", event => {
       if (event.target === ownerLoginModal) {
         closeOwnerLogin();
       }
+    });
+  }
+});
 
-    }
-  );
-}
 
 function setupVideoOptimization() {
   const videos = document.querySelectorAll(".game-video");

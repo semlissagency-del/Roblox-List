@@ -1229,15 +1229,32 @@ async function handleThumbnailPaste(event) {
     }
   }
 }
-
-
   
-const pasteArea = document.getElementById("thumbnailPasteArea");
 
-if (pasteArea) {
-  pasteArea.addEventListener("click", () => {
-    pasteArea.focus();
-  });
+pasteArea.addEventListener("click", () => {
+  pasteArea.focus();
+});
+
+document.addEventListener("paste", event => {
+  const modal = document.getElementById("gameModal");
+
+  // Only handle pastes while the Add/Edit Game modal is open.
+  if (!modal || getComputedStyle(modal).display === "none") {
+    return;
+  }
+
+  // Don't interfere with normal pasting into text fields.
+  const target = event.target;
+  if (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement
+  ) {
+    return;
+  }
+
+  handleThumbnailPaste(event);
+});
+
 
   pasteArea.addEventListener("paste", handleThumbnailPaste);
 }

@@ -190,6 +190,51 @@ async function loadGames() {
    CREATE GAME CARD
 ================================ */
 
+
+function normalizeCategory(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_-]+/g, "");
+}
+
+function getGameCategories(game) {
+  function parseCategories(value) {
+    if (Array.isArray(value)) return value;
+
+    if (typeof value !== "string" || !value.trim()) {
+      return [];
+    }
+
+    // Support JSON arrays stored as strings.
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {}
+
+    // Support PostgreSQL array-like strings.
+    if (value.trim().startsWith("{") && value.trim().endsWith("}")) {
+      return value
+        .trim()
+        .slice(1, -1)
+        .split(",")
+        .map(item => item.trim().replace(/^"|"$/g, ""));
+    }
+
+    return [value];
+  }
+
+  const categories = [
+    ...parseCategories(game.categories),
+    ...parseCategories(game.category)
+  ]
+    .map(normalizeCategory)
+    .filter(Boolean);
+
+  return [...new Set(categories)];
+}
+
+
 function createGameCard(game) {
   const card = document.createElement("div");
 
@@ -200,9 +245,10 @@ function createGameCard(game) {
   card.dataset.name =
     (game.name || "").toLowerCase();
 
-const categories = Array.isArray(game.categories) && game.categories.length
-  ? game.categories
-  : [game.category || "adventure"];
+const categories = getGameCategories(game);
+
+card.dataset.categories = JSON.stringify(categories);
+card.dataset.category = categories[0] || "";
 
 card.dataset.categories = JSON.stringify(
   categories.map(category => String(category).trim().toLowerCase())
@@ -214,9 +260,7 @@ card.dataset.categories = JSON.stringify(
   const safeDescription =
     escapeHTML(game.description || "");
 
-const gameCategories =
-  game.categories ||
-  (game.category ? [game.category] : []);
+const gameCategories = categories;
 
 
   const thumbnail =
@@ -713,15 +757,14 @@ if (preview && data.thumbnail) {
   document.getElementById("gameLink")
     .value = data.game_link || "";
 
-const selectedCategories =
-  data.categories ||
-  (data.category ? [data.category] : ["adventure"]);
+const selectedCategories = getGameCategories(data);
 
 document
   .querySelectorAll("#gameCategories input")
   .forEach(input => {
-    input.checked =
-      selectedCategories.includes(input.value);
+    input.checked = selectedCategories.includes(
+      normalizeCategory(input.value)
+    );
   });
 
   document.getElementById("gamePlayers")
@@ -920,6 +963,7 @@ async function deleteGame(id) {
 }
 
 
+
 /* ================================
    SEARCH / FILTER
 ================================ */
@@ -937,29 +981,40 @@ function applyFilters() {
   const categorySelect = document.getElementById("category");
 
   const search = (searchBox?.value || "").trim().toLowerCase();
-  const selectedCategory = (
+  const selectedCategory = normalizeCategory(
     categorySelect?.value || "all"
-  ).trim().toLowerCase();
+  );
 
-  document.querySelectorAll("#gameList .game").forEach(game => {
-    const gameName = (game.dataset.name || "").toLowerCase();
+  const cards = document.querySelectorAll("#gameList .game");
+
+  cards.forEach(card => {
+    const gameName = (
+      card.dataset.name ||
+      card.querySelector("h3")?.textContent ||
+      ""
+    ).trim().toLowerCase();
 
     let categories = [];
 
     try {
-      categories = JSON.parse(game.dataset.categories || "[]");
+      categories = JSON.parse(card.dataset.categories || "[]");
     } catch {
       categories = [];
     }
 
-    // Support older cards that only have a single category.
-    if (!categories.length && game.dataset.category) {
-      categories = [game.dataset.category];
+    // Fallback for older cards.
+    if (!categories.length && card.dataset.category) {
+      categories = [card.dataset.category];
     }
 
-    categories = categories.map(value =>
-      String(value).trim().toLowerCase()
-    );
+    // Also fall back to the categories shown on the card.
+    if (!categories.length) {
+      categories = Array.from(
+        card.querySelectorAll(".tags .tag")
+      ).map(tag => tag.textContent);
+    }
+
+    categories = categories.map(normalizeCategory).filter(Boolean);
 
     const matchesSearch = gameName.includes(search);
 
@@ -967,10 +1022,11 @@ function applyFilters() {
       selectedCategory === "all" ||
       categories.includes(selectedCategory);
 
-    game.style.display =
+    card.style.display =
       matchesSearch && matchesCategory ? "" : "none";
   });
 }
+
 
 
 /* ================================

@@ -1463,37 +1463,132 @@ main {
 
 
 
-/* =====================================
-   FINAL GAME GRID OVERRIDE
-===================================== */
+/* FINAL GRID FIX: 8 GAMES PER ROW */
 
-/* Large desktop screens: 8 games per row */
-@media (min-width: 1400px) {
-  #gameList.games {
-    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
-    gap: 12px !important;
-  }
+/* Desktop: exactly 8 cards per row */
+#gameList.games {
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  max-width: none !important;
+  gap: 10px !important;
+  padding: 12px 0 !important;
+  align-items: start;
 }
 
-/* Smaller desktops and laptops: 4 games per row */
-@media (min-width: 701px) and (max-width: 1399px) {
+/* Compact cards for the 8-column layout */
+#gameList.games .game {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border-radius: 12px !important;
+  border-width: 1px !important;
+}
+
+/* Thumbnail */
+#gameList.games .game-thumbnail {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+/* Compact title panel */
+#gameList.games .game-content {
+  min-width: 0 !important;
+  padding: 8px !important;
+  gap: 8px !important;
+}
+
+#gameList.games .game-content h3 {
+  min-height: 48px !important;
+  padding: 6px !important;
+  border-radius: 10px !important;
+  font-size: clamp(11px, 1vw, 16px) !important;
+  line-height: 1.25 !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Keep descriptions and category tags hidden */
+#gameList.games .description,
+#gameList.games .tags,
+#gameList.games .tag {
+  display: none !important;
+}
+
+/* Players and rating */
+#gameList.games .stats {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  padding: 8px 4px !important;
+  border-radius: 10px !important;
+  font-size: 11px !important;
+  white-space: normal !important;
+}
+
+/* Play button remains hidden */
+#gameList.games .play-button {
+  display: none !important;
+}
+
+/* Owner controls remain available */
+#gameList.games .owner-controls {
+  position: static !important;
+  display: flex !important;
+  gap: 4px !important;
+  padding: 6px !important;
+}
+
+#gameList.games .owner-controls button {
+  min-width: 0 !important;
+  padding: 6px 3px !important;
+  font-size: 10px !important;
+}
+
+/* Medium screens: 4 per row */
+@media (min-width: 701px) and (max-width: 1199px) {
   #gameList.games {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 14px !important;
+    gap: 12px !important;
+  }
+
+  #gameList.games .game-content h3 {
+    font-size: 15px !important;
   }
 }
 
-/* Tablets and phones: 2 games per row */
+/* Phones and small tablets: 2 per row */
 @media (min-width: 381px) and (max-width: 700px) {
   #gameList.games {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
   }
+
+  #gameList.games .game-content h3 {
+    font-size: 16px !important;
+  }
+
+  #gameList.games .stats {
+    font-size: 12px !important;
+  }
 }
 
-/* Very small phones: 1 game per row */
+/* Very small phones: 1 per row */
 @media (max-width: 380px) {
   #gameList.games {
     grid-template-columns: 1fr !important;
   }
+
+  #gameList.games .game-content h3 {
+    font-size: 18px !important;
+  }
+
+  #gameList.games .stats {
+    flex-direction: row !important;
+  }
 }
+

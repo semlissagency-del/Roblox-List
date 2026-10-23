@@ -200,11 +200,13 @@ function createGameCard(game) {
   card.dataset.name =
     (game.name || "").toLowerCase();
 
-  card.dataset.category =
-    game.category || "adventure";
+const categories = Array.isArray(game.categories) && game.categories.length
+  ? game.categories
+  : [game.category || "adventure"];
 
-card.dataset.categories =
-  (game.categories || [game.category || "adventure"]).join(",");
+card.dataset.categories = JSON.stringify(
+  categories.map(category => String(category).trim().toLowerCase())
+);
 
   const safeName =
     escapeHTML(game.name || "");
@@ -926,43 +928,48 @@ function searchGames() {
   applyFilters();
 }
 
-
 function filterGames() {
   applyFilters();
 }
 
-
 function applyFilters() {
-  const search =
-    document.getElementById("searchBox")
-      .value.toLowerCase();
+  const searchBox = document.getElementById("searchBox");
+  const categorySelect = document.getElementById("category");
 
-  const category =
-    document.getElementById("category").value;
+  const search = (searchBox?.value || "").trim().toLowerCase();
+  const selectedCategory = (
+    categorySelect?.value || "all"
+  ).trim().toLowerCase();
 
-  document
-    .querySelectorAll(".game")
-    .forEach(game => {
+  document.querySelectorAll("#gameList .game").forEach(game => {
+    const gameName = (game.dataset.name || "").toLowerCase();
 
-      const matchesSearch =
-        game.dataset.name
-          .includes(search);
+    let categories = [];
 
-      const gameCategories =
-        game.dataset.categories
-          ? game.dataset.categories.split(",")
-          : [game.dataset.category];
+    try {
+      categories = JSON.parse(game.dataset.categories || "[]");
+    } catch {
+      categories = [];
+    }
 
-      const matchesCategory =
-        category === "all" ||
-        gameCategories.includes(category);
+    // Support older cards that only have a single category.
+    if (!categories.length && game.dataset.category) {
+      categories = [game.dataset.category];
+    }
 
-      game.style.display =
-        matchesSearch &&
-        matchesCategory
-          ? ""
-          : "none";
-    });
+    categories = categories.map(value =>
+      String(value).trim().toLowerCase()
+    );
+
+    const matchesSearch = gameName.includes(search);
+
+    const matchesCategory =
+      selectedCategory === "all" ||
+      categories.includes(selectedCategory);
+
+    game.style.display =
+      matchesSearch && matchesCategory ? "" : "none";
+  });
 }
 
 
@@ -1294,31 +1301,26 @@ window.addEventListener("pageshow", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchBox = document.getElementById("searchBox");
+  const categorySelect = document.getElementById("category");
 
-  if (!searchBox) return;
+  if (searchBox) {
+    searchBox.addEventListener("input", () => {
+      const value = searchBox.value.trim().toLowerCase();
 
-  function checkOwnerSearch() {
-    const value = searchBox.value.trim().toLowerCase();
+      if (value === OWNER_EMAIL.toLowerCase()) {
+        searchBox.value = "";
+        openOwnerLogin();
+        return;
+      }
 
-    if (value === OWNER_EMAIL.toLowerCase()) {
-      searchBox.value = "";
-      openOwnerLogin();
-      return true;
-    }
-
-    return false;
+      applyFilters();
+    });
   }
 
-  searchBox.addEventListener("input", () => {
-    if (checkOwnerSearch()) return;
-    filterGames();
-  });
-
-  searchBox.addEventListener("keyup", () => {
-    checkOwnerSearch();
-  });
+  if (categorySelect) {
+    categorySelect.addEventListener("change", applyFilters);
+  }
 });
-
 
 function openOwnerLogin() {
   const modal =

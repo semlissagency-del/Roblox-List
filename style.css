@@ -1892,36 +1892,39 @@ main {
 
 
 
+
 /* ==========================================
    FINAL ROBLOX CARD DESIGN
-   Compact card + full-bleed image + title pill
+   Full image + centered title pill + side-by-side stats
    ========================================== */
 
-/* Compact outer card */
-#gameList .game {
+#gameList.games .game {
   box-sizing: border-box;
-  min-width: 0;
-  height: fit-content;
-  min-height: 0;
-  align-self: start;
-  padding: 0 !important;
-  gap: 0 !important;
   display: flex;
   flex-direction: column;
+  align-self: start;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: fit-content;
+  padding: 0 !important;
+  gap: 0 !important;
   overflow: hidden;
+  background: #292929;
+  border: 1px solid #454545;
   border-radius: 14px;
   cursor: pointer;
 }
 
-/* Image fills the entire top, edge to edge */
-#gameList .game > .game-thumbnail {
+/* Image touches all edges at the top */
+#gameList.games .game > .game-thumbnail {
   display: block;
   box-sizing: border-box;
   width: 100%;
-  max-width: none;
-  height: auto;
+  height: auto !important;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+  object-position: center;
   margin: 0;
   padding: 0;
   border: 0;
@@ -1929,27 +1932,29 @@ main {
   flex-shrink: 0;
 }
 
-/* Tight information area below the image */
-#gameList .game > .game-content {
-  box-sizing: border-box;
+/* Compact information section */
+#gameList.games .game > .game-content {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  min-width: 0;
+  box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   margin: 0;
-  padding: 5px;
-  gap: 5px;
+  padding: 6px;
+  gap: 6px;
 }
 
-/* Centered, rounded title pill.
-   Preserve the existing title font size and boldness. */
-#gameList .game .game-content h3 {
+/* Centered pill title; preserve boldness and existing font size */
+#gameList.games .game .game-content h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
-  display: block;
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  min-height: 0 !important;
   align-self: stretch;
   margin: 0;
   padding: 7px 8px;
@@ -1961,40 +1966,41 @@ main {
   overflow-wrap: anywhere;
 }
 
-/* Hide extra content to keep cards compact */
-#gameList .game .description,
-#gameList .game .tags,
-#gameList .game .play-button {
+/* Hide descriptions, categories, and the Play button */
+#gameList.games .game .description,
+#gameList.games .game .tags,
+#gameList.games .game .play-button {
   display: none !important;
 }
 
-/* Two separate stat boxes on the same row */
-#gameList .game .stats {
-  box-sizing: border-box;
+/* Player count and rating always stay side by side */
+#gameList.games .game .stats {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  flex-direction: row !important;
   align-items: stretch;
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  gap: 5px;
   margin: 0;
   padding: 0;
+  gap: 5px;
+  border: 0;
 }
 
-/* Player count and rating */
-#gameList .game .stats .players,
-#gameList .game .stats .rating {
-  box-sizing: border-box;
+/* Separate stat pills */
+#gameList.games .game .stats .players,
+#gameList.games .game .stats .rating {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
   min-height: 34px;
   margin: 0;
-  padding: 5px 3px;
-  border-radius: 10px;
+  padding: 5px 2px;
+  border-radius: 999px;
   font-size: 10px;
   line-height: 1.2;
   text-align: center;
@@ -2002,31 +2008,74 @@ main {
   overflow-wrap: anywhere;
 }
 
-#gameList .game .stats .players {
+#gameList.games .game .stats .players {
   background: #101b27;
   color: #35d995;
 }
 
-#gameList .game .stats .rating {
+#gameList.games .game .stats .rating {
   background: #101b27;
   color: #ffd34f;
 }
 
-/* Keep owner controls visible and usable */
-#gameList .game .owner-controls {
+/* Keep owner edit/delete controls usable */
+#gameList.games .game .owner-controls {
+  position: static !important;
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  padding: 0 5px 5px;
+  padding: 0 6px 6px;
 }
 
-#gameList .game .owner-controls button {
+#gameList.games .game .owner-controls button {
   min-width: 0;
   padding: 5px;
   font-size: 10px;
 }
 
-/* Preserve hidden results from search and filters */
-#gameList .game[hidden] {
+/* Keep search/filter-hidden cards hidden */
+#gameList.games .game[hidden] {
   display: none !important;
+}
+
+/* Desktop: 8 cards per row */
+@media (min-width: 1200px) {
+  #gameList.games {
+    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+/* Medium screens: 4 cards per row */
+@media (min-width: 701px) and (max-width: 1199px) {
+  #gameList.games {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+
+/* Phones and small tablets: 2 cards per row */
+@media (min-width: 381px) and (max-width: 700px) {
+  #gameList.games {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  #gameList.games .game > .game-content {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  #gameList.games .game .stats .players,
+  #gameList.games .game .stats .rating {
+    font-size: 10px;
+    min-height: 32px;
+  }
+}
+
+/* Very small phones: 1 card per row */
+@media (max-width: 380px) {
+  #gameList.games {
+    grid-template-columns: 1fr !important;
+  }
 }

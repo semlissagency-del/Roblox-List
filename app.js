@@ -379,6 +379,39 @@ ${video ? `
   }
 
 
+
+  card.addEventListener("click", event => {
+    // Keep owner controls independent from opening the game.
+    if (
+      event.target.closest(
+        ".owner-controls, .drag-handle, button, a, input"
+      )
+    ) {
+      return;
+    }
+
+    openGame(game.game_link);
+  });
+
+  card.setAttribute("role", "link");
+  card.setAttribute("tabindex", "0");
+  card.setAttribute(
+    "aria-label",
+    "Open " + (game.name || "Roblox game")
+  );
+
+  card.addEventListener("keydown", event => {
+    if (
+      event.target !== card ||
+      (event.key !== "Enter" && event.key !== " ")
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    openGame(game.game_link);
+  });
+
   return card;
 }
 
@@ -1022,8 +1055,8 @@ function applyFilters() {
       selectedCategory === "all" ||
       categories.includes(selectedCategory);
 
-    card.style.display =
-      matchesSearch && matchesCategory ? "" : "none";
+card.hidden = !(matchesSearch && matchesCategory);
+
   });
 }
 

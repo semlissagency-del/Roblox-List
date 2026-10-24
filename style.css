@@ -2079,3 +2079,48 @@ main {
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* FINAL FIX: TWO SEPARATE STAT PILLS SIDE BY SIDE */
+#gameList.games .game .stats {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  flex-direction: unset !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  gap: 5px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+#gameList.games .game .stats .players,
+#gameList.games .game .stats .rating {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 34px !important;
+  margin: 0 !important;
+  padding: 5px 3px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+#gameList.games .game .stats .players {
+  background: #101b27 !important;
+  color: #35d995 !important;
+}
+
+#gameList.games .game .stats .rating {
+  background: #101b27 !important;
+  color: #ffd34f !important;
+}

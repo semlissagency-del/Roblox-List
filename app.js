@@ -1380,13 +1380,65 @@ document.addEventListener("paste", event => {
 
 setupThumbnailInput();
 
+
+/* =====================================
+   SEARCH, FILTERS & HIDDEN OWNER LOGIN
+===================================== */
+
+// Discourage browsers from autofilling the owner email.
+function prepareSearchBox() {
+  const searchBox = document.getElementById("searchBox");
+  const categorySelect = document.getElementById("category");
+
+  if (searchBox) {
+    searchBox.setAttribute("autocomplete", "off");
+    searchBox.setAttribute("autocorrect", "off");
+    searchBox.setAttribute("autocapitalize", "off");
+    searchBox.setAttribute("spellcheck", "false");
+
+    // Clear any email restored by browser autofill or page history.
+    searchBox.value = "";
+    applyFilters();
+
+    // Typing or autofill must NEVER open the login prompt.
+    searchBox.addEventListener("input", () => {
+      applyFilters();
+    });
+
+    // Only pressing Enter with the exact owner email opens login.
+    searchBox.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+
+      const value = searchBox.value.trim().toLowerCase();
+
+      if (value !== OWNER_EMAIL.toLowerCase()) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      searchBox.value = "";
+      applyFilters();
+      openOwnerLogin();
+    });
+  }
+
+  if (categorySelect) {
+    categorySelect.addEventListener("change", applyFilters);
+  }
+}
+
+// Prepare the search field on initial load and browser reload/back navigation.
+document.addEventListener("DOMContentLoaded", prepareSearchBox);
+
 window.addEventListener("pageshow", () => {
   const searchBox = document.getElementById("searchBox");
 
   if (searchBox) {
     searchBox.value = "";
+    applyFilters();
   }
 });
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchBox = document.getElementById("searchBox");

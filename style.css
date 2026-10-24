@@ -1829,3 +1829,63 @@ main {
 #gameList .game[hidden] {
   display: none !important;
 }
+
+
+/* Thumbnail fills the entire top of the game card */
+#gameList .game {
+  padding: 0 !important;
+  overflow: hidden;
+  gap: 0;
+}
+
+/* Image touches the outer card edges */
+#gameList .game > .game-thumbnail {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0 !important;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Keep the card's rounded outer top corners */
+#gameList .game {
+  border-radius: 14px;
+}
+
+/* Add spacing back only around the information below the image */
+#gameList .game > .game-content {
+  padding: 5px;
+  gap: 4px;
+}
+
+/* Centered pill-shaped title */
+#gameList .game .game-content h3 {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-self: stretch;
+  text-align: center;
+  border-radius: 999px;
+  margin: 0;
+}
+
+/* Two separate stat boxes side by side */
+#gameList .game .stats {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 5px;
+  width: 100%;
+  margin: 0;
+}
+
+#gameList .game .stats .players,
+#gameList .game .stats .rating {
+  min-width: 0;
+  box-sizing: border-box;
+  border-radius: 999px;
+}

@@ -1385,27 +1385,27 @@ setupThumbnailInput();
    SEARCH, FILTERS & HIDDEN OWNER LOGIN
 ===================================== */
 
-// Discourage browsers from autofilling the owner email.
 function prepareSearchBox() {
   const searchBox = document.getElementById("searchBox");
   const categorySelect = document.getElementById("category");
 
   if (searchBox) {
+    // Prevent browser autofill where supported.
     searchBox.setAttribute("autocomplete", "off");
+    searchBox.setAttribute("name", "game-search-" + Date.now());
     searchBox.setAttribute("autocorrect", "off");
     searchBox.setAttribute("autocapitalize", "off");
     searchBox.setAttribute("spellcheck", "false");
 
-    // Clear any email restored by browser autofill or page history.
+    // Clear restored text without triggering the owner login.
     searchBox.value = "";
-    applyFilters();
 
-    // Typing or autofill must NEVER open the login prompt.
     searchBox.addEventListener("input", () => {
       applyFilters();
     });
 
-    // Only pressing Enter with the exact owner email opens login.
+    // Owner login only opens when Enter is pressed
+    // after the exact owner email has been typed.
     searchBox.addEventListener("keydown", event => {
       if (event.key !== "Enter") return;
 
@@ -1414,7 +1414,7 @@ function prepareSearchBox() {
       if (value !== OWNER_EMAIL.toLowerCase()) return;
 
       event.preventDefault();
-      event.stopPropagation();
+      event.stopImmediatePropagation();
 
       searchBox.value = "";
       applyFilters();
@@ -1427,7 +1427,6 @@ function prepareSearchBox() {
   }
 }
 
-// Prepare the search field on initial load and browser reload/back navigation.
 document.addEventListener("DOMContentLoaded", prepareSearchBox);
 
 window.addEventListener("pageshow", () => {
@@ -1436,30 +1435,6 @@ window.addEventListener("pageshow", () => {
   if (searchBox) {
     searchBox.value = "";
     applyFilters();
-  }
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const searchBox = document.getElementById("searchBox");
-  const categorySelect = document.getElementById("category");
-
-  if (searchBox) {
-    searchBox.addEventListener("input", () => {
-      const value = searchBox.value.trim().toLowerCase();
-
-      if (value === OWNER_EMAIL.toLowerCase()) {
-        searchBox.value = "";
-        openOwnerLogin();
-        return;
-      }
-
-      applyFilters();
-    });
-  }
-
-  if (categorySelect) {
-    categorySelect.addEventListener("change", applyFilters);
   }
 });
 

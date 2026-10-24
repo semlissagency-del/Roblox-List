@@ -1699,3 +1699,133 @@ main {
 #gameList .game[hidden] {
   display: none !important;
 }
+
+
+
+/* ==========================================
+   ROBLOX CARDS — COMPACT, WIDER-LOOKING SHAPE
+   ========================================== */
+
+#gameList .game {
+  box-sizing: border-box;
+  height: fit-content;
+  min-height: 0;
+  align-self: start;
+  padding: 5px;
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 13px;
+}
+
+/* Keep the thumbnail width; don't make the card taller */
+#gameList .game .game-thumbnail {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+
+/* Tight content spacing */
+#gameList .game .game-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  gap: 4px;
+}
+
+/* Title: fit the text, not a tall oversized box */
+#gameList .game .game-content h3 {
+  display: block;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
+  margin: 0;
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: #000;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Hide unnecessary content in compact cards */
+#gameList .game .description,
+#gameList .game .tags,
+#gameList .game .play-button {
+  display: none;
+}
+
+/* ALWAYS put player count and rating on the same row */
+#gameList .game .stats {
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Keep both stat boxes equally sized */
+#gameList .game .stats .players,
+#gameList .game .stats .rating {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
+  margin: 0;
+  padding: 4px 2px;
+  border-radius: 9px;
+  font-size: 10px;
+  line-height: 1.1;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+#gameList .game .stats .players {
+  background: #101b27;
+  color: #35d995;
+}
+
+#gameList .game .stats .rating {
+  background: #101b27;
+  color: #ffd34f;
+}
+
+/* Keep owner controls usable */
+#gameList .game .owner-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+#gameList .game .owner-controls button {
+  min-width: 0;
+  padding: 5px;
+  font-size: 10px;
+}
+
+/* Don't let older CSS override hidden search results */
+#gameList .game[hidden] {
+  display: none !important;
+}

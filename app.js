@@ -1438,7 +1438,65 @@ window.addEventListener("pageshow", () => {
   }
 });
 
-function openOwnerLogin() {
+
+/* =====================================
+   SEARCH, FILTERS & HIDDEN OWNER LOGIN
+===================================== */
+
+function prepareSearchBox() {
+  const searchBox = document.getElementById("searchBox");
+  const categorySelect = document.getElementById("category");
+
+  if (searchBox) {
+    searchBox.setAttribute("autocomplete", "off");
+    searchBox.setAttribute("autocorrect", "off");
+    searchBox.setAttribute("autocapitalize", "off");
+    searchBox.setAttribute("spellcheck", "false");
+
+    // Never open owner login from search text.
+    searchBox.value = "";
+
+    searchBox.addEventListener("input", () => {
+      applyFilters();
+    });
+  }
+
+  if (categorySelect) {
+    categorySelect.addEventListener("change", applyFilters);
+  }
+}
+
+// Open owner login using Ctrl + Shift + L.
+// Typing or autofilling an email will never open it.
+document.addEventListener("keydown", event => {
+  if (
+    event.ctrlKey &&
+    event.shiftKey &&
+    event.key.toLowerCase() === "l"
+  ) {
+    event.preventDefault();
+
+    const searchBox = document.getElementById("searchBox");
+    if (searchBox) {
+      searchBox.value = "";
+      applyFilters();
+    }
+
+    openOwnerLogin();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", prepareSearchBox);
+
+window.addEventListener("pageshow", () => {
+  const searchBox = document.getElementById("searchBox");
+
+  if (searchBox) {
+    searchBox.value = "";
+    applyFilters();
+  }
+});
+
   const modal =
     document.getElementById("ownerLoginModal");
 

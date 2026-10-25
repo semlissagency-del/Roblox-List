@@ -1500,25 +1500,6 @@ window.addEventListener("pageshow", () => {
   }
 });
 
-// Open owner login with Ctrl + Shift + L.
-document.addEventListener("keydown", event => {
-  if (
-    event.ctrlKey &&
-    event.shiftKey &&
-    event.key.toLowerCase() === "l"
-  ) {
-    event.preventDefault();
-
-    const searchBox = document.getElementById("searchBox");
-
-    if (searchBox) {
-      searchBox.value = "";
-      applyFilters();
-    }
-
-    openOwnerLogin();
-  }
-});
 
 function openOwnerLogin() {
   const modal = document.getElementById("ownerLoginModal");

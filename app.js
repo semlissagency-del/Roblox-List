@@ -1448,18 +1448,19 @@ function prepareSearchBox() {
   const categorySelect = document.getElementById("category");
 
   if (searchBox) {
-    searchBox.setAttribute("autocomplete", "off");
-    searchBox.setAttribute("autocorrect", "off");
-    searchBox.setAttribute("autocapitalize", "off");
-    searchBox.setAttribute("spellcheck", "false");
+  searchBox.setAttribute("type", "search");
+  searchBox.setAttribute("name", "game-library-filter");
+  searchBox.setAttribute("autocomplete", "off");
+  searchBox.setAttribute("autocorrect", "off");
+  searchBox.setAttribute("autocapitalize", "off");
+  searchBox.setAttribute("spellcheck", "false");
 
-    // Never open owner login from search text.
-    searchBox.value = "";
+  searchBox.value = "";
 
-    searchBox.addEventListener("input", () => {
-      applyFilters();
-    });
-  }
+  searchBox.addEventListener("input", () => {
+    applyFilters();
+  });
+}
 
   if (categorySelect) {
     categorySelect.addEventListener("change", applyFilters);

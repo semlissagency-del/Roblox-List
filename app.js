@@ -1464,7 +1464,24 @@ function prepareSearchBox() {
     // Never open owner login because of autofill or typed text.
     searchBox.value = "";
 
-    searchBox.addEventListener("input", applyFilters);
+    
+searchBox.addEventListener("input", applyFilters);
+
+searchBox.addEventListener("keydown", event => {
+  if (event.key !== "Enter") return;
+
+  const email = searchBox.value.trim().toLowerCase();
+
+  if (email === "semlissagency@gmail.com") {
+    event.preventDefault();
+    event.stopPropagation();
+
+    searchBox.value = "";
+    applyFilters();
+    openOwnerLogin();
+  }
+});
+
   }
 
   if (categorySelect) {

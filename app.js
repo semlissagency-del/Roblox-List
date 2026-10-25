@@ -1386,64 +1386,6 @@ document.addEventListener("paste", event => {
 setupThumbnailInput();
 
 
-/* =====================================
-   SEARCH, FILTERS & HIDDEN OWNER LOGIN
-===================================== */
-
-function prepareSearchBox() {
-  const searchBox = document.getElementById("searchBox");
-  const categorySelect = document.getElementById("category");
-
-  if (searchBox) {
-    // Prevent browser autofill where supported.
-    searchBox.setAttribute("autocomplete", "off");
-    searchBox.setAttribute("name", "game-search-" + Date.now());
-    searchBox.setAttribute("autocorrect", "off");
-    searchBox.setAttribute("autocapitalize", "off");
-    searchBox.setAttribute("spellcheck", "false");
-
-    // Clear restored text without triggering the owner login.
-    searchBox.value = "";
-
-    searchBox.addEventListener("input", () => {
-      applyFilters();
-    });
-
-    // Owner login only opens when Enter is pressed
-    // after the exact owner email has been typed.
-    searchBox.addEventListener("keydown", event => {
-      if (event.key !== "Enter") return;
-
-      const value = searchBox.value.trim().toLowerCase();
-
-      if (value !== OWNER_EMAIL.toLowerCase()) return;
-
-      event.preventDefault();
-      event.stopImmediatePropagation();
-
-      searchBox.value = "";
-      applyFilters();
-      openOwnerLogin();
-    });
-  }
-
-  if (categorySelect) {
-    categorySelect.addEventListener("change", applyFilters);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", prepareSearchBox);
-
-window.addEventListener("pageshow", () => {
-  const searchBox = document.getElementById("searchBox");
-
-  if (searchBox) {
-    searchBox.value = "";
-    applyFilters();
-  }
-});
-
-
 
 /* =====================================
    SEARCH & HIDDEN OWNER LOGIN
@@ -1670,27 +1612,3 @@ function setupVideoOptimization() {
   });
 }
 
-
-
-document.addEventListener("keydown", function (event) {
-  if (event.key !== "Enter") return;
-
-  if (!event.target || event.target.id !== "searchBox") return;
-
-  const email = event.target.value.trim().toLowerCase();
-
-  if (email !== "semlissagency@gmail.com") return;
-
-  event.preventDefault();
-  event.stopImmediatePropagation();
-
-  event.target.value = "";
-
-  if (typeof applyFilters === "function") {
-    applyFilters();
-  }
-
-  if (typeof openOwnerLogin === "function") {
-    openOwnerLogin();
-  }
-}, true);

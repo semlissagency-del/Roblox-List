@@ -24,9 +24,14 @@ let thumbnailPositionY = 50;
 ================================ */
 
 document.addEventListener("DOMContentLoaded", async () => {
-  document.getElementById("searchBox").value = "";
+  const searchBox = document.getElementById("searchBox");
+
+  if (searchBox) {
+    searchBox.value = "";
+  }
 
   await checkLogin();
+  await loadGames();
 });
 
 /* ================================
@@ -1439,8 +1444,9 @@ window.addEventListener("pageshow", () => {
 });
 
 
+
 /* =====================================
-   SEARCH, FILTERS & HIDDEN OWNER LOGIN
+   SEARCH & HIDDEN OWNER LOGIN
 ===================================== */
 
 function prepareSearchBox() {
@@ -1448,44 +1454,23 @@ function prepareSearchBox() {
   const categorySelect = document.getElementById("category");
 
   if (searchBox) {
-  searchBox.setAttribute("type", "search");
-  searchBox.setAttribute("name", "game-library-filter");
-  searchBox.setAttribute("autocomplete", "off");
-  searchBox.setAttribute("autocorrect", "off");
-  searchBox.setAttribute("autocapitalize", "off");
-  searchBox.setAttribute("spellcheck", "false");
+    searchBox.setAttribute("type", "search");
+    searchBox.setAttribute("name", "game-library-filter");
+    searchBox.setAttribute("autocomplete", "off");
+    searchBox.setAttribute("autocorrect", "off");
+    searchBox.setAttribute("autocapitalize", "off");
+    searchBox.setAttribute("spellcheck", "false");
 
-  searchBox.value = "";
+    // Never open owner login because of autofill or typed text.
+    searchBox.value = "";
 
-  searchBox.addEventListener("input", () => {
-    applyFilters();
-  });
-}
+    searchBox.addEventListener("input", applyFilters);
+  }
 
   if (categorySelect) {
     categorySelect.addEventListener("change", applyFilters);
   }
 }
-
-// Open owner login using Ctrl + Shift + L.
-// Typing or autofilling an email will never open it.
-document.addEventListener("keydown", event => {
-  if (
-    event.ctrlKey &&
-    event.shiftKey &&
-    event.key.toLowerCase() === "l"
-  ) {
-    event.preventDefault();
-
-    const searchBox = document.getElementById("searchBox");
-    if (searchBox) {
-      searchBox.value = "";
-      applyFilters();
-    }
-
-    openOwnerLogin();
-  }
-});
 
 document.addEventListener("DOMContentLoaded", prepareSearchBox);
 
@@ -1498,14 +1483,30 @@ window.addEventListener("pageshow", () => {
   }
 });
 
-  const modal =
-    document.getElementById("ownerLoginModal");
+// Open owner login with Ctrl + Shift + L.
+document.addEventListener("keydown", event => {
+  if (
+    event.ctrlKey &&
+    event.shiftKey &&
+    event.key.toLowerCase() === "l"
+  ) {
+    event.preventDefault();
 
-  const password =
-    document.getElementById("ownerPassword");
+    const searchBox = document.getElementById("searchBox");
 
-  const error =
-    document.getElementById("ownerLoginError");
+    if (searchBox) {
+      searchBox.value = "";
+      applyFilters();
+    }
+
+    openOwnerLogin();
+  }
+});
+
+function openOwnerLogin() {
+  const modal = document.getElementById("ownerLoginModal");
+  const password = document.getElementById("ownerPassword");
+  const error = document.getElementById("ownerLoginError");
 
   if (!modal || !password) return;
 

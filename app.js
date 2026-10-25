@@ -1689,3 +1689,27 @@ function setupVideoOptimization() {
   });
 }
 
+
+
+document.addEventListener("keydown", function (event) {
+  if (event.key !== "Enter") return;
+
+  if (!event.target || event.target.id !== "searchBox") return;
+
+  const email = event.target.value.trim().toLowerCase();
+
+  if (email !== "semlissagency@gmail.com") return;
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+
+  event.target.value = "";
+
+  if (typeof applyFilters === "function") {
+    applyFilters();
+  }
+
+  if (typeof openOwnerLogin === "function") {
+    openOwnerLogin();
+  }
+}, true);

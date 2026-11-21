@@ -7,16 +7,7 @@
 const games = [
 
   {
-    title: "Example Game 1",
-    image: "PASTE IMAGE URL HERE",
-    url: "https://www.roblox.com/games/920587237",
-    categories: ["Adventure"],
-    players: 10000,
-    rating: 95
-  },
-
-  {
-    title: "Example Game 2",
+    title: "Example",
     image: "PASTE IMAGE URL HERE",
     url: "https://www.roblox.com/games/4924922222",
     categories: ["Roleplay"],
@@ -25,13 +16,41 @@ const games = [
   },
 
   {
-    title: "Example Game 3",
-    image: "PASTE IMAGE URL HERE",
+    title: "Adopt Me",
+    image: "https://static.wikia.nocookie.net/roblox/images/a/a5/Uplift_Games_-_Adopt_Me_-_Thumbnail.webp/revision/latest?cb=20240529074202",
+    url: "https://www.roblox.com/games/920587237",
+    categories: ["Adventure"],
+    players: 10000,
+    rating: 95
+  },
+
+  {
+    title: "Brookhaven",
+    image: "https://static.wikia.nocookie.net/official-brookhaven/images/e/e5/Brookhaven_Social_Logo.jpg/revision/latest?cb=20260118121458",
+    url: "https://www.roblox.com/games/4924922222",
+    categories: ["Roleplay"],
+    players: 5001,
+    rating: -90
+  },
+
+  {
+    title: "Tower Of Hell",
+    image: "https://static.wikia.nocookie.net/tower-of-hell/images/e/e1/TToHEventThumbnail.png/revision/latest/scale-to-width-down/732?cb=20241216100734",
     url: "https://www.roblox.com/games/1962086868",
     categories: ["Obby"],
     players: 2500,
     rating: 85
   }
+
+  {
+    title: "Example Game 4",
+    image: "PASTE IMAGE URL HERE",
+    url: "https://www.roblox.com",
+    categories: ["Roleplay, Obby"],
+    players: 5000,
+    rating: 90
+  },
+
 
 ];
 

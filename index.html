@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,6 @@
   <title>RobloxList</title>
 
   <link rel="stylesheet" href="style.css">
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -23,23 +21,8 @@
     <a href="#">Home</a>
     <a href="#games">Games</a>
     <a href="#popular">Popular</a>
-
-
-    <button id="logoutButton" onclick="logout()" style="display:none;">
-      Logout
-    </button>
   </nav>
 </header>
-
-
-<div id="ownerBar" class="owner-bar" style="display:none;">
-  🔐 Owner Mode
-
-  <button onclick="openAddGame()">
-    + Add Game
-  </button>
-</div>
-
 
 <section class="hero">
 
@@ -50,19 +33,13 @@
     Browse popular games and discover new experiences.
   </p>
 
-
   <div class="search">
     <input
-  id="searchBox"
-  type="search"
-  name="game-library-filter"
-  placeholder="Search games..."
-  autocomplete="off"
-  autocorrect="off"
-  autocapitalize="off"
-  spellcheck="false"
-  data-form-type="other"
->
+      id="searchBox"
+      type="search"
+      placeholder="Search games..."
+      autocomplete="off"
+    >
 
     <button type="button" onclick="searchGames()">
       Search
@@ -72,7 +49,6 @@
 </section>
 
 <main id="games">
-
 
   <div class="toolbar">
 
@@ -90,218 +66,13 @@
 
   </div>
 
-
-  <div id="gameList" class="games">
-
-    <div class="loading">
-      Loading games...
-    </div>
-
-  </div>
+  <div id="gameList" class="games"></div>
 
 </main>
-
 
 <footer>
   RobloxList
 </footer>
-
-
-<!-- LOGIN -->
-
-
-<!-- ADD / EDIT -->
-
-<div id="gameModal" class="modal">
-
-  <div class="modal-box">
-
-    <h2 id="modalTitle">
-      Add Game
-    </h2>
-
-    <input
-      id="gameName"
-      placeholder="Game name"
-    >
-
-<div class="thumbnail-input-group">
-  <label for="gameThumbnail">Game Thumbnail</label>
-
-  <input
-    id="gameThumbnail"
-    type="url"
-    placeholder="Paste an image URL..."
-  >
-
-  <input
-    id="gameThumbnailFile"
-    type="file"
-    accept="image/*"
-  >
-
-  <div
-    id="thumbnailPasteArea"
-    class="thumbnail-paste-area"
-    tabindex="0"
-  >
-    📋 Paste an image here
-  </div>
-
-<img
-  id="thumbnailPreview"
-  class="thumbnail-preview"
-  style="display:none;"
-  alt="Thumbnail preview"
->
-
-<div id="thumbnailPositionControls" class="thumbnail-position-controls">
-
-  <label>
-    Thumbnail Horizontal Position
-    <input
-      id="thumbnailPositionX"
-      type="range"
-      min="0"
-      max="100"
-      value="50"
-    >
-  </label>
-
-  <label>
-    Thumbnail Vertical Position
-    <input
-      id="thumbnailPositionY"
-      type="range"
-      min="0"
-      max="100"
-      value="50"
-    >
-  </label>
-
-</div>
-
-</div>
-
-    <label for="gameVideo">Game Video</label>
-
-    <input
-      id="gameVideo"
-      type="url"
-      placeholder="Paste a video URL... (MP4/WebM)"
-      autocomplete="off"
-    >
-
-    <textarea
-      id="gameDescription"
-      placeholder="Description"
-    ></textarea>
-
-    <input
-      id="gameLink"
-      placeholder="Roblox game URL"
-    >
-
-    <div id="gameCategories" class="game-categories">
-
-  <label>
-    <input type="checkbox" value="adventure">
-    Adventure
-  </label>
-
-  <label>
-    <input type="checkbox" value="simulator">
-    Simulator
-  </label>
-
-  <label>
-    <input type="checkbox" value="roleplay">
-    Roleplay
-  </label>
-
-  <label>
-    <input type="checkbox" value="horror">
-    Horror
-  </label>
-
-  <label>
-    <input type="checkbox" value="obby">
-    Obby
-  </label>
-
-  <label>
-    <input type="checkbox" value="pvp">
-    PvP
-  </label>
-
-</div>
-
-    <input
-      id="gamePlayers"
-      type="number"
-      placeholder="Players"
-      value="0"
-    >
-
-    <input
-      id="gameRating"
-      type="number"
-      min="0"
-      max="100"
-      placeholder="Rating"
-      value="100"
-    >
-
-    <div id="gameError" class="error"></div>
-
-    <button onclick="saveGame()">
-      Save Game
-    </button>
-
-    <button class="secondary" onclick="closeGameModal()">
-      Cancel
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- OWNER LOGIN -->
-
-<div id="ownerLoginModal" class="owner-login-modal" style="display:none;">
-  <div class="owner-login-box">
-
-    <button
-      id="closeOwnerLogin"
-      class="owner-login-close"
-      type="button"
-    >
-      ×
-    </button>
-
-    <h2>Owner Login</h2>
-
-    <input
-      id="ownerPassword"
-      type="password"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
-
-    <button
-      id="ownerLoginButton"
-      class="owner-login-arrow"
-      type="button"
-    >
-      →
-    </button>
-
-    <div id="ownerLoginError"></div>
-
-  </div>
-</div>
-
 
 <script src="app.js"></script>
 

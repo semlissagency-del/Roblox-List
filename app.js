@@ -30,7 +30,7 @@ const games = [
     url: "https://www.roblox.com/games/4924922222",
     categories: ["Roleplay"],
     players: 5001,
-    rating: -90
+    rating: 90
   },
 
   {
@@ -40,17 +40,16 @@ const games = [
     categories: ["Obby"],
     players: 2500,
     rating: 85
-  }
+  },
 
   {
     title: "Example Game 4",
     image: "PASTE IMAGE URL HERE",
     url: "https://www.roblox.com",
-    categories: ["Roleplay, Obby"],
+    categories: ["Roleplay", "Obby"],
     players: 5000,
     rating: 90
-  },
-
+  }
 
 ];
 
@@ -61,9 +60,7 @@ const games = [
 
 const gameList = document.getElementById("gameList");
 
-// Keep the existing card layout, with 8 cards per row.
 gameList.style.display = "grid";
-gameList.style.gridTemplateColumns = "repeat(8, minmax(0, 1fr))";
 
 
 function renderGames() {
@@ -164,8 +161,12 @@ function applyFilters() {
   const categorySelect =
     document.getElementById("category");
 
+  if (!searchBox || !categorySelect) {
+    return;
+  }
+
   const search =
-    (searchBox.value || "").trim().toLowerCase();
+    searchBox.value.trim().toLowerCase();
 
   const selectedCategory =
     categorySelect.value.toLowerCase();
@@ -242,8 +243,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchBox =
     document.getElementById("searchBox");
 
+  const categorySelect =
+    document.getElementById("category");
+
   if (searchBox) {
     searchBox.addEventListener("input", applyFilters);
+  }
+
+  if (categorySelect) {
+    categorySelect.addEventListener("change", applyFilters);
   }
 
   renderGames();

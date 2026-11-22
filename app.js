@@ -1,7 +1,5 @@
-
 /* =========================================
    ROBLOXLIST - GAME DATABASE
-   Add, remove, or edit games in this section.
 ========================================= */
 
 const games = [
@@ -15,34 +13,34 @@ const games = [
     rating: 90
   },
 
- {
+  {
     title: "Adopt Me",
     image: "https://www.roblox.com/asset-thumbnail/image?assetId=920587237&width=420&height=420&format=png",
     url: "https://www.roblox.com/games/920587237",
     categories: ["Adventure"],
     players: 10000,
     rating: 95
-},
+  },
 
-{
+  {
     title: "Brookhaven",
     image: "https://www.roblox.com/asset-thumbnail/image?assetId=4924922222&width=420&height=420&format=png",
     url: "https://www.roblox.com/games/4924922222",
     categories: ["Roleplay"],
     players: 5001,
     rating: 90
-},
+  },
 
-{
+  {
     title: "Tower Of Hell",
     image: "https://www.roblox.com/asset-thumbnail/image?assetId=1962086868&width=420&height=420&format=png",
     url: "https://www.roblox.com/games/1962086868",
     categories: ["Obby"],
     players: 2500,
     rating: 85
-}
+  },
 
-  {,
+  {
     title: "Example Game 4",
     image: "PASTE IMAGE URL HERE",
     url: "https://www.roblox.com",

@@ -33,7 +33,7 @@ const games = [
 
   {
     title: "Tower Of Hell",
-    image: "https://static.playhop.com/images/d6843_11385414_3d3e2/b048ae230/2a00000193cf9cfd_6724592/a6f1a0f1402b58c2b85d_6c7c0c/orig",
+    image: "https://static.wikia.nocookie.net/tower-of-hell/images/e/e6/MainGameIcon.png/revision/latest?cb=20220722053414",
     url: "https://www.roblox.com/games/1962086868",
     categories: ["Obby"],
     players: 2500,

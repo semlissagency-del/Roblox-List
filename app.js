@@ -15,7 +15,7 @@ const games = [
 
   {
     title: "Adopt Me",
-    image: "https://www.roblox.com/asset-thumbnail/image?assetId=920587237&width=420&height=420&format=png",
+    image: "https://tr.rbxcdn.com/180DAY-4f4f2b9866a0fbc240057268ddfb3864/768/432/Image/Webp/noFilter",
     url: "https://www.roblox.com/games/920587237",
     categories: ["Adventure"],
     players: 10000,
@@ -24,7 +24,7 @@ const games = [
 
   {
     title: "Brookhaven",
-    image: "https://www.roblox.com/asset-thumbnail/image?assetId=4924922222&width=420&height=420&format=png",
+    image: "https://m.media-amazon.com/images/M/MV5BNWIwZjJjNTMtZGQ2OS00MjdmLWE1NTEtNWMzZTNiY2IwZmU4XkEyXkFqcGc@._V1_.jpg",
     url: "https://www.roblox.com/games/4924922222",
     categories: ["Roleplay"],
     players: 5001,
@@ -33,7 +33,7 @@ const games = [
 
   {
     title: "Tower Of Hell",
-    image: "https://www.roblox.com/asset-thumbnail/image?assetId=1962086868&width=420&height=420&format=png",
+    image: "https://static.playhop.com/images/d6843_11385414_3d3e2/b048ae230/2a00000193cf9cfd_6724592/a6f1a0f1402b58c2b85d_6c7c0c/orig",
     url: "https://www.roblox.com/games/1962086868",
     categories: ["Obby"],
     players: 2500,
@@ -86,11 +86,13 @@ function renderGames() {
       .join("");
 
     card.innerHTML = `
-      <img
-        class="game-thumbnail"
-        src="${escapeHTML(game.image)}"
-        alt="${escapeHTML(game.title)}"
-      >
+<img
+  class="game-thumbnail"
+  src="${escapeHTML(game.image)}"
+  alt="${escapeHTML(game.title)}"
+  loading="lazy"
+  onerror="this.onerror=null; this.src='https://placehold.co/400x400/222222/ffffff?text=No+Image'"
+>
 
       <div class="game-content">
 
